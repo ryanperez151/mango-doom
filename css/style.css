@@ -1,0 +1,268 @@
+/*
+  MANGO.SYS stylesheet
+  Covers three "screens" the site moves through:
+    1. The boot terminal (typing animation)
+    2. The main menu (after boot finishes)
+    3. The content sections (NEW GAME, CREDITS, etc.)
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* padding/border count toward an element's width, not added on top */
+}
+
+/* Dark background with a warm mango-orange text color instead of classic green */
+body {
+  background-color: #1a0f00; /* deep brown-black, like a shadowy mango crate */
+  color: #ff9d1f; /* mango orange */
+  font-family: 'Courier New', Courier, monospace;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#terminal {
+  width: 80%;
+  max-width: 700px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  /* subtle glow effect to make the orange text feel alive */
+  text-shadow: 0 0 6px rgba(255, 157, 31, 0.6);
+}
+
+#cursor {
+  display: inline-block;
+  width: 10px;
+  background-color: #ff9d1f;
+  animation: blink 1s step-start infinite;
+}
+
+/* Warning lines glow red instead of mango orange */
+.line-warning {
+  color: #ff3b3b;
+  text-shadow: 0 0 6px rgba(255, 59, 59, 0.6);
+}
+
+/* Success/system-ready lines glow green */
+.line-success {
+  color: #33ff66;
+  text-shadow: 0 0 6px rgba(51, 255, 102, 0.6);
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+#main-menu-btn {
+  display: none;
+  margin-top: 30px;
+  padding: 12px 30px;
+  background: transparent;
+  border: 2px solid #ff9d1f;
+  color: #ff9d1f;
+  font-family: inherit;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-shadow: 0 0 6px rgba(255, 157, 31, 0.6);
+  transition: background 0.2s, color 0.2s;
+}
+
+#main-menu-btn:hover {
+  background: #ff9d1f;
+  color: #1a0f00;
+}
+
+/* Simple fade-in used whenever the menu or a content section appears */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- Main menu ---------- */
+#main-menu {
+  display: none; /* JS switches this to "flex" once boot finishes */
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+#main-menu.visible {
+  display: flex;
+  animation: fadeIn 0.5s ease;
+}
+
+.menu-logo {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 2.4rem;
+  color: #ff3b3b;
+  text-shadow:
+    0 0 10px rgba(255, 59, 59, 0.85),
+    0 0 24px rgba(255, 157, 31, 0.5),
+    3px 3px 0 #1a0f00;
+  letter-spacing: 4px;
+  text-align: center;
+}
+
+.menu-subtitle {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 0.65rem;
+  color: #ff9d1f;
+  letter-spacing: 3px;
+  opacity: 0.75;
+  margin-top: 12px;
+  margin-bottom: 50px;
+}
+
+.menu-options {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.menu-option {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 0.95rem;
+  color: #ff9d1f;
+  letter-spacing: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: color 0.15s, transform 0.15s;
+}
+
+/* The little mango pointer next to each option — hidden until selected */
+.menu-option .pointer {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.menu-option.selected {
+  color: #ff3b3b;
+  text-shadow: 0 0 10px rgba(255, 59, 59, 0.8);
+  transform: translateX(8px); /* nudges the selected row to the right */
+}
+
+.menu-option.selected .pointer {
+  opacity: 1;
+}
+
+/* ---------- Content sections (NEW GAME, CREDITS, etc.) ---------- */
+#content-view {
+  display: none; /* JS switches this to "flex" when a menu option is picked */
+  flex-direction: column;
+  align-items: flex-start;
+  width: 85%;
+  max-width: 760px;
+  max-height: 82vh;
+  overflow-y: auto; /* lets long sections scroll instead of overflowing the screen */
+  z-index: 1;
+}
+
+#content-view.visible {
+  display: flex;
+  animation: fadeIn 0.4s ease;
+}
+
+.content-panel {
+  display: none; /* only the active section (see .active below) is shown */
+  width: 100%;
+}
+
+.content-panel.active {
+  display: block;
+}
+
+.content-panel h2 {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 1.4rem;
+  color: #ff3b3b;
+  text-shadow: 0 0 8px rgba(255, 59, 59, 0.7);
+  letter-spacing: 2px;
+  margin-bottom: 26px;
+}
+
+.content-panel p,
+.content-panel li {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #ff9d1f;
+}
+
+.content-panel p {
+  margin-bottom: 14px;
+}
+
+.content-panel ul.plain-list {
+  list-style: none;
+  margin-bottom: 14px;
+}
+
+.content-panel ul.plain-list li::before {
+  content: "» ";
+  color: #ff3b3b;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid rgba(255, 157, 31, 0.35);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.data-table th {
+  color: #ff3b3b;
+  text-shadow: 0 0 6px rgba(255, 59, 59, 0.6);
+}
+
+.back-btn {
+  margin-top: 20px;
+  padding: 10px 24px;
+  background: transparent;
+  border: 2px solid #ff9d1f;
+  color: #ff9d1f;
+  font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-shadow: 0 0 6px rgba(255, 157, 31, 0.6);
+  transition: background 0.2s, color 0.2s;
+}
+
+.back-btn:hover {
+  background: #ff9d1f;
+  color: #1a0f00;
+}
+
+/* Faint scanline overlay across the whole screen for a retro CRT feel */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 157, 31, 0.03) 0px,
+    rgba(255, 157, 31, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none; /* lets clicks pass through to the button underneath */
+}

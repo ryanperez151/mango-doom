@@ -3,212 +3,99 @@
 <head>
   <meta charset="UTF-8" />
   <title>MANGO.SYS</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Dark background with a warm mango-orange text color instead of classic green */
-    body {
-      background-color: #1a0f00; /* deep brown-black, like a shadowy mango crate */
-      color: #ff9d1f; /* mango orange */
-      font-family: 'Courier New', Courier, monospace;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    #terminal {
-      width: 80%;
-      max-width: 700px;
-      font-size: 1.1rem;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      /* subtle glow effect to make the orange text feel alive */
-      text-shadow: 0 0 6px rgba(255, 157, 31, 0.6);
-    }
-
-    #cursor {
-      display: inline-block;
-      width: 10px;
-      background-color: #ff9d1f;
-      animation: blink 1s step-start infinite;
-    }
-
-/* Warning lines glow red instead of mango orange */
-.line-warning {
-  color: #ff3b3b;
-  text-shadow: 0 0 6px rgba(255, 59, 59, 0.6);
-}
-
-/* Success/system-ready lines glow green */
-.line-success {
-  color: #33ff66;
-  text-shadow: 0 0 6px rgba(51, 255, 102, 0.6);
-}
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-
-    #main-menu-btn {
-      display: none;
-      margin-top: 30px;
-      padding: 12px 30px;
-      background: transparent;
-      border: 2px solid #ff9d1f;
-      color: #ff9d1f;
-      font-family: inherit;
-      font-size: 1rem;
-      letter-spacing: 2px;
-      cursor: pointer;
-      text-shadow: 0 0 6px rgba(255, 157, 31, 0.6);
-      transition: background 0.2s, color 0.2s;
-    }
-
-    #main-menu-btn:hover {
-      background: #ff9d1f;
-      color: #1a0f00;
-    }
-
-    /* Faint scanline overlay across the whole screen for a retro CRT feel */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(255, 157, 31, 0.03) 0px,
-        rgba(255, 157, 31, 0.03) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-      pointer-events: none; /* lets clicks pass through to the button underneath */
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
   <div id="terminal"></div>
   <button id="main-menu-btn">ENTER MAIN MENU</button>
 
-<script>
-  // Boot lines — firewall console style with mango/cybersecurity puns
-  const bootLines = [
-    "MANGO.SYS Firewall Appliance — Boot Loader v3.1.4",
-    "Copyright (c) Ryan Perez Security Systems",
-    "",
-    "Performing POST........................ OK",
-    "Checking peel integrity................ OK",
-    "Checking pit density................... OK",
-    "Loading kernel: mangOS-hardened.img... OK",
-    "",
-    "Initializing interfaces:",
-    "  Eth0/JUICE-LAN......................  UP",
-    "  Eth1/PIT-WAN........................  UP",
-    "  Eth2/PESTICIDE-DMZ..................  DOWN (isolated)",
-    "",
-    "Mounting /var/orchard...................  OK",
-    "Loading sw33t protocols.................  OK",
-    "Loading ripeness detection engine.......  OK",
-    "Applying pulp filtering rules...........  over 9000 loaded",
-    "",
-    "Checking license........................  VALID (Grade A Fruit)",
-    "Syncing threat signatures...............  OK",
-    "Bypassing pesticides.................... OK",
-    "Decrypting produce access.................. OK",
-    "",
-    "WARNING: 1 rotten packet quarantined at Eth2",
-    "",
-    "System ready.",
-    "Access granted. Welcome, operator. 🥭"
-  ];
+  <div id="main-menu">
+    <div class="menu-logo">MANGO DOOM</div>
+    <div class="menu-subtitle">— MAIN MENU —</div>
+    <ul class="menu-options">
+      <li class="menu-option selected" data-section="newgame">
+        <span class="pointer">🥭</span><span class="label">NEW GAME</span>
+      </li>
+      <li class="menu-option" data-section="credits">
+        <span class="pointer">🥭</span><span class="label">CREDITS</span>
+      </li>
+      <li class="menu-option" data-section="characters">
+        <span class="pointer">🥭</span><span class="label">CHARACTER SHEETS</span>
+      </li>
+      <li class="menu-option" data-section="leaderboard">
+        <span class="pointer">🥭</span><span class="label">LEADERBOARD</span>
+      </li>
+      <li class="menu-option" data-section="extras">
+        <span class="pointer">🥭</span><span class="label">EXTRAS</span>
+      </li>
+    </ul>
+  </div>
 
-  const terminalEl = document.getElementById("terminal");
-  const menuBtn = document.getElementById("main-menu-btn");
+  <div id="content-view">
+    <section class="content-panel" id="section-newgame">
+      <h2>NEW GAME</h2>
+      <p>Initializing new campaign...</p>
+      <p>Every great hunt starts with a single ripe target. Choose your loadout, sharpen your blade, and step into the orchard. The rot doesn't sleep, and neither does MANGO.SYS.</p>
+      <p>(Campaign launch coming soon.)</p>
+      <button class="back-btn">◄ BACK TO MENU</button>
+    </section>
 
-  // Sped up base typing speed (was 35ms per character, now 12ms)
-  const typingSpeed = 5;
-  // Base pause between lines (was 400ms, now much shorter)
-  const linePause = 40;
-  // Extra pause specifically for "status" lines (OK / UP / DOWN),
-  // so those still feel like the system is "checking" something
-  const statusLinePause = 220;
+    <section class="content-panel" id="section-credits">
+      <h2>CREDITS</h2>
+      <ul class="plain-list">
+        <li>Created &amp; coded by Ryan Perez</li>
+        <li>Built with HTML, CSS &amp; vanilla JavaScript</li>
+        <li>Inspired by id Software's DOOM (1993)</li>
+        <li>Mango-themed everything, because why not</li>
+        <li>Thanks for playing</li>
+      </ul>
+      <button class="back-btn">◄ BACK TO MENU</button>
+    </section>
 
-  let lineIndex = 0;
-  let charIndex = 0;
-  let currentLineSpan = null; // the <span> element we're currently typing into
+    <section class="content-panel" id="section-characters">
+      <h2>CHARACTER SHEETS</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th>Name</th><th>Class</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Operator Ryan</td><td>Orchard Guardian</td><td>Active</td></tr>
+          <tr><td>???</td><td>???</td><td>Locked</td></tr>
+        </tbody>
+      </table>
+      <p>More operators coming soon.</p>
+      <button class="back-btn">◄ BACK TO MENU</button>
+    </section>
 
-  // Decide if a line is a "status" line worth pausing on a bit longer
-  function isStatusLine(line) {
-    return /(OK|UP|DOWN)\s*$/.test(line.trim());
-  }
+    <section class="content-panel" id="section-leaderboard">
+      <h2>LEADERBOARD</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th>Rank</th><th>Operator</th><th>Score</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>—</td><td>No scores yet</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p>Be the first to make the board.</p>
+      <button class="back-btn">◄ BACK TO MENU</button>
+    </section>
 
-  // Decide what color class a finished line should get
-  function getLineClass(line) {
-    if (line.startsWith("WARNING")) return "line-warning";
-    if (line.startsWith("Access granted") || line.startsWith("System ready")) return "line-success";
-    return ""; // default mango-orange, no special class needed
-  }
+    <section class="content-panel" id="section-extras">
+      <h2>EXTRAS</h2>
+      <p><strong>LOG 001 — SYSTEM GENESIS</strong><br />MANGO.SYS comes online. Orchard perimeter secured.</p>
+      <p><strong>LOG 002 — FIRST HARVEST</strong><br />Initial threat signatures synced. Ripeness detection engine calibrated.</p>
+      <p><strong>LOG 003 — CLASSIFIED</strong><br />[ REDACTED ]</p>
+      <button class="back-btn">◄ BACK TO MENU</button>
+    </section>
+  </div>
 
-  function typeLine() {
-    if (lineIndex >= bootLines.length) {
-      finishBoot();
-      return;
-    }
-
-    const currentLine = bootLines[lineIndex];
-
-    // Start a new line: create a fresh span to type into
-    if (charIndex === 0) {
-      currentLineSpan = document.createElement("span");
-      terminalEl.appendChild(currentLineSpan);
-    }
-
-    if (charIndex < currentLine.length) {
-      currentLineSpan.textContent += currentLine.charAt(charIndex);
-      charIndex++;
-      setTimeout(typeLine, typingSpeed);
-    } else {
-      // Line finished typing — apply color class now that we know full content
-      const lineClass = getLineClass(currentLine);
-      if (lineClass) currentLineSpan.classList.add(lineClass);
-
-      // Add the line break after the span
-      terminalEl.appendChild(document.createTextNode("\n"));
-
-      lineIndex++;
-      charIndex = 0;
-
-      // Pause longer after status lines (OK/UP/DOWN), shorter otherwise
-      const pause = isStatusLine(currentLine) ? statusLinePause : linePause;
-      setTimeout(typeLine, pause);
-    }
-  }
-
-  function finishBoot() {
-    const cursorSpan = document.createElement("span");
-    cursorSpan.id = "cursor";
-    cursorSpan.textContent = " ";
-    terminalEl.appendChild(cursorSpan);
-    menuBtn.style.display = "block";
-  }
-
-  menuBtn.addEventListener("click", () => {
-    console.log("Main menu button clicked — menu screen goes here next.");
-  });
-
-  typeLine();
-</script>
+  <script src="js/boot.js"></script>
+  <script src="js/menu.js"></script>
 
 </body>
 </html>
