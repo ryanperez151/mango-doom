@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Play PESTICIDE-DMZ, a retro canvas raycaster built with vanilla JavaScript for the MANGO.SYS cybersecurity portfolio." />
+  <meta name="theme-color" content="#1a0f00" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="PESTICIDE-DMZ | MANGO.SYS Playable Demo" />
+  <meta property="og:description" content="Purge rotten packets from a compromised firewall in this original browser raycaster." />
+  <title>PESTICIDE-DMZ | MANGO.SYS Playable Demo</title>
+  <link rel="canonical" href="https://mangosec.xyz/game.html" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/game.css" />
+</head>
+<body class="game-page">
+  <a class="skip-link" href="#game-wrap">Skip to game</a>
+
+  <main class="game-layout">
+    <header class="game-header">
+      <div>
+        <p class="eyebrow">MANGO.SYS // ETH2/PESTICIDE-DMZ</p>
+        <h1>Firewall Mission</h1>
+      </div>
+      <a class="button" href="index.html">Abort Mission</a>
+    </header>
+
+    <p class="touch-notice" id="touch-notice">
+      This mission currently requires a physical keyboard. You can still explore the
+      <a href="index.html#projects">portfolio and project case study</a> on this device.
+    </p>
+
+    <div id="game-wrap" tabindex="-1">
+      <canvas
+        id="viewport"
+        width="480"
+        height="300"
+        role="img"
+        aria-label="First-person view of the PESTICIDE-DMZ complex. Use W, A, S, and D to move, arrow keys to turn, Space to fire, and E to interact."
+      >
+        Your browser does not support the canvas game. Return to the
+        <a href="index.html">MANGO.SYS portfolio</a>.
+      </canvas>
+
+      <div id="crosshair" aria-hidden="true"></div>
+      <div class="feedback-flash" aria-hidden="true"></div>
+
+      <div id="hud" aria-label="Mission status">
+        <div class="hud-top">
+          <a class="hud-exit" href="index.html">◄ ABORT MISSION</a>
+          <div class="hud-threats">
+            THREATS REMAINING<br />
+            <span id="threats-value">12</span>
+          </div>
+        </div>
+
+        <div class="hud-bottom">
+          <div class="hud-hint">WASD MOVE &nbsp; ←→ TURN &nbsp; SPACE / CLICK FIRE &nbsp; E INTERACT</div>
+          <div class="hud-stat">
+            <span class="hud-label">INTEGRITY</span>
+            <span class="hud-bar" role="presentation"><span class="hud-bar-fill" id="health-fill"></span></span>
+            <span class="hud-value" id="health-value">100</span>
+          </div>
+          <div class="hud-stat">
+            <span class="hud-label">CHARGE</span>
+            <span class="hud-bar" role="presentation"><span class="hud-bar-fill" id="charge-fill"></span></span>
+            <span class="hud-value" id="charge-value">100</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="overlay-screen visible" id="screen-start" role="dialog" aria-modal="true" aria-labelledby="start-title">
+        <p class="panel-kicker">MISSION BRIEFING</p>
+        <h2 id="start-title">Pesticide-DMZ Breach</h2>
+        <p>
+          Twelve threats have crossed the perimeter: rotten packets, fast-moving
+          spore drones, and heavily armored wormware brutes. Purge every threat
+          before system integrity reaches zero. Field intel reports patch kits,
+          charge cells, and a rumored weapon overclock scattered through the
+          complex&mdash;and whispers of a golden asset sealed behind a wall that
+          doesn't quite match its neighbors.
+        </p>
+        <ul class="control-list">
+          <li><kbd>W A S D</kbd> Move and strafe</li>
+          <li><kbd>← →</kbd> Turn</li>
+          <li><kbd>Space</kbd> or click to fire</li>
+          <li><kbd>E</kbd> Interact with suspicious walls</li>
+        </ul>
+        <div class="overlay-buttons">
+          <button class="button button-primary" id="start-game-btn" type="button">Begin Mission</button>
+          <a class="button" href="index.html">Return to Portfolio</a>
+        </div>
+      </section>
+
+      <section class="overlay-screen" id="screen-pause" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+        <h2 id="pause-title">Mission Paused</h2>
+        <p>MANGO.SYS suspended the simulation while this tab was inactive.</p>
+        <button class="button button-primary" id="resume-game-btn" type="button">Resume Mission</button>
+      </section>
+
+      <section class="overlay-screen" id="screen-win" role="dialog" aria-modal="true" aria-labelledby="win-title">
+        <h2 id="win-title">Perimeter Secured</h2>
+        <p>Every threat was purged from the DMZ. Eth2 reports clean and the orchard stands—for now.</p>
+        <p id="win-secret-note"></p>
+        <div class="overlay-buttons">
+          <button class="button button-primary restart-btn" type="button">Restart Mission</button>
+          <a class="button" href="index.html#projects">View Project Case Study</a>
+        </div>
+      </section>
+
+      <section class="overlay-screen" id="screen-lose" role="dialog" aria-modal="true" aria-labelledby="lose-title">
+        <h2 id="lose-title">System Compromised</h2>
+        <p>Integrity failure. The rot breached the firewall. Reboot the operator and try again.</p>
+        <div class="overlay-buttons">
+          <button class="button button-primary restart-btn" type="button">Restart Mission</button>
+          <a class="button" href="index.html">Back to Portfolio</a>
+        </div>
+      </section>
+    </div>
+
+    <p class="sr-only" id="game-status" aria-live="polite" aria-atomic="true">Mission briefing ready.</p>
+  </main>
+
+  <script src="js/raycaster.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

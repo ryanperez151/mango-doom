@@ -1,113 +1,131 @@
 // boot.js
-// Handles the fake "firewall booting up" terminal animation.
-// When it's done, it reveals the ENTER MAIN MENU button (menu.js takes it from there).
+// Runs the decorative MANGO.SYS startup sequence. The portfolio itself is
+// ordinary HTML and does not depend on this animation.
 
-// This is just a list of strings — one per line of the boot log.
-// We'll type them out on screen one character at a time.
-const bootLines = [
-  "MANGO.SYS Firewall Appliance — Boot Loader v3.1.4",
-  "Copyright (c) Ryan Perez Security Systems",
-  "",
-  "Performing POST........................ OK",
-  "Checking peel integrity................ OK",
-  "Checking pit density................... OK",
-  "Loading kernel: mangOS-hardened.img... OK",
-  "",
-  "Initializing interfaces:",
-  "  Eth0/JUICE-LAN......................  UP",
-  "  Eth1/PIT-WAN........................  UP",
-  "  Eth2/PESTICIDE-DMZ..................  DOWN (isolated)",
-  "",
-  "Mounting /var/orchard...................  OK",
-  "Loading sw33t protocols.................  OK",
-  "Loading ripeness detection engine.......  OK",
-  "Applying pulp filtering rules...........  over 9000 loaded",
-  "",
-  "Checking license........................  VALID (Grade A Fruit)",
-  "Syncing threat signatures...............  OK",
-  "Bypassing pesticides.................... OK",
-  "Decrypting produce access.................. OK",
-  "",
-  "WARNING: 1 rotten packet quarantined at Eth2",
-  "",
-  "System ready.",
-  "Access granted. Welcome, operator. 🥭"
-];
+(function () {
+  "use strict";
 
-// document.getElementById grabs a reference to an element already sitting in index.html,
-// so we can change what it shows / how it looks from here.
-const terminalEl = document.getElementById("terminal");
-const menuBtn = document.getElementById("main-menu-btn");
+  const STORAGE_KEY = "mangoSys.bootSeen";
+  const bootLines = [
+    "MANGO.SYS Firewall Appliance — Boot Loader v3.1.4",
+    "Copyright (c) Ryan Perez Security Systems",
+    "",
+    "Performing POST........................ OK",
+    "Checking peel integrity................ OK",
+    "Checking pit density................... OK",
+    "Loading kernel: mangOS-hardened.img... OK",
+    "",
+    "Initializing interfaces:",
+    "  Eth0/JUICE-LAN......................  UP",
+    "  Eth1/PIT-WAN........................  UP",
+    "  Eth2/PESTICIDE-DMZ..................  DOWN (isolated)",
+    "",
+    "Mounting /var/orchard................... OK",
+    "Loading sw33t protocols................. OK",
+    "Loading ripeness detection engine....... OK",
+    "Applying pulp filtering rules........... over 9000 loaded",
+    "",
+    "Checking license........................ VALID (Grade A Fruit)",
+    "Syncing threat signatures............... OK",
+    "Bypassing pesticides.................... OK",
+    "Decrypting produce access............... OK",
+    "",
+    "WARNING: 1 rotten packet quarantined at Eth2",
+    "",
+    "System ready.",
+    "Access granted. Welcome, operator. 🥭"
+  ];
 
-// Sped up base typing speed (was 35ms per character, now 12ms)
-const typingSpeed = 5;
-// Base pause between lines (was 400ms, now much shorter)
-const linePause = 40;
-// Extra pause specifically for "status" lines (OK / UP / DOWN),
-// so those still feel like the system is "checking" something
-const statusLinePause = 220;
+  const terminalEl = document.getElementById("terminal");
+  const skipButton = document.getElementById("main-menu-btn");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let cancelled = false;
+  let lineIndex = 0;
+  let charIndex = 0;
+  let currentLineSpan = null;
 
-let lineIndex = 0;
-let charIndex = 0;
-let currentLineSpan = null; // the <span> element we're currently typing into
-
-// Decide if a line is a "status" line worth pausing on a bit longer
-function isStatusLine(line) {
-  return /(OK|UP|DOWN)\s*$/.test(line.trim());
-}
-
-// Decide what color class a finished line should get
-function getLineClass(line) {
-  if (line.startsWith("WARNING")) return "line-warning";
-  if (line.startsWith("Access granted") || line.startsWith("System ready")) return "line-success";
-  return ""; // default mango-orange, no special class needed
-}
-
-// This function calls itself (via setTimeout) over and over, one character
-// or one pause at a time, until every line in bootLines has been typed out.
-function typeLine() {
-  if (lineIndex >= bootLines.length) {
-    finishBoot();
-    return;
+  function storageSetSeen(value) {
+    try {
+      if (value) {
+        sessionStorage.setItem(STORAGE_KEY, "true");
+      } else {
+        sessionStorage.removeItem(STORAGE_KEY);
+      }
+    } catch (error) {
+      // Storage can be disabled; skipping still works for this page load.
+    }
   }
 
-  const currentLine = bootLines[lineIndex];
-
-  // Start a new line: create a fresh span to type into
-  if (charIndex === 0) {
-    currentLineSpan = document.createElement("span");
-    terminalEl.appendChild(currentLineSpan);
+  function completeBoot() {
+    storageSetSeen(true);
+    if (document.documentElement.classList.contains("boot-complete")) return;
+    cancelled = true;
+    document.documentElement.classList.add("boot-complete");
+    const portfolio = document.getElementById("portfolio");
+    if (portfolio) {
+      portfolio.setAttribute("tabindex", "-1");
+      portfolio.focus({ preventScroll: true });
+      portfolio.removeAttribute("tabindex");
+    }
   }
 
-  if (charIndex < currentLine.length) {
-    currentLineSpan.textContent += currentLine.charAt(charIndex);
-    charIndex++;
-    setTimeout(typeLine, typingSpeed);
-  } else {
-    // Line finished typing — apply color class now that we know full content
+  function getLineClass(line) {
+    if (line.startsWith("WARNING")) return "line-warning";
+    if (line.startsWith("Access granted") || line.startsWith("System ready")) return "line-success";
+    return "";
+  }
+
+  function finishTyping() {
+    if (cancelled) return;
+    const cursor = document.createElement("span");
+    cursor.id = "cursor";
+    cursor.textContent = " ";
+    terminalEl.appendChild(cursor);
+    window.setTimeout(completeBoot, 500);
+  }
+
+  function typeLine() {
+    if (cancelled) return;
+    if (lineIndex >= bootLines.length) {
+      finishTyping();
+      return;
+    }
+
+    const currentLine = bootLines[lineIndex];
+    if (charIndex === 0) {
+      currentLineSpan = document.createElement("span");
+      terminalEl.appendChild(currentLineSpan);
+    }
+
+    if (charIndex < currentLine.length) {
+      currentLineSpan.textContent += currentLine.charAt(charIndex);
+      charIndex += 1;
+      window.setTimeout(typeLine, 5);
+      return;
+    }
+
     const lineClass = getLineClass(currentLine);
     if (lineClass) currentLineSpan.classList.add(lineClass);
-
-    // Add the line break after the span
     terminalEl.appendChild(document.createTextNode("\n"));
-
-    lineIndex++;
+    lineIndex += 1;
     charIndex = 0;
-
-    // Pause longer after status lines (OK/UP/DOWN), shorter otherwise
-    const pause = isStatusLine(currentLine) ? statusLinePause : linePause;
-    setTimeout(typeLine, pause);
+    const isStatusLine = /(OK|UP|DOWN)\s*$/.test(currentLine.trim());
+    window.setTimeout(typeLine, isStatusLine ? 180 : 35);
   }
-}
 
-// Runs once, after the last boot line has finished typing.
-function finishBoot() {
-  const cursorSpan = document.createElement("span");
-  cursorSpan.id = "cursor";
-  cursorSpan.textContent = " ";
-  terminalEl.appendChild(cursorSpan);
-  menuBtn.style.display = "block"; // reveal the ENTER MAIN MENU button
-}
+  skipButton.addEventListener("click", completeBoot);
 
-// Kick everything off as soon as this script runs.
-typeLine();
+  if (document.documentElement.classList.contains("boot-complete") || reducedMotion) {
+    completeBoot();
+  } else {
+    typeLine();
+  }
+
+  window.MangoBoot = {
+    replay: function () {
+      storageSetSeen(false);
+      window.location.hash = "";
+      window.location.reload();
+    }
+  };
+})();

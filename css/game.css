@@ -1,0 +1,315 @@
+.game-page {
+  display: block;
+  padding: clamp(0.75rem, 3vw, 2rem);
+}
+
+.game-layout {
+  width: min(100%, 64rem);
+  margin-inline: auto;
+}
+
+.game-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.game-header h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.touch-notice {
+  display: none;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--red);
+  background: rgba(255, 77, 77, 0.08);
+}
+
+#game-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid var(--orange);
+  background: #000;
+  box-shadow: 0 0 20px rgba(255, 157, 31, 0.35);
+  aspect-ratio: 8 / 5;
+}
+
+#viewport {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  image-rendering: pixelated;
+  touch-action: none;
+}
+
+#hud {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  padding: clamp(0.4rem, 2.5%, 1.2rem);
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-size: clamp(0.5rem, 1.3vw, 0.72rem);
+  font-weight: 900;
+}
+
+.hud-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.hud-exit {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--border);
+  background: rgba(13, 7, 0, 0.82);
+  color: var(--orange);
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.hud-threats {
+  padding: 0.35rem 0.55rem;
+  border: 1px solid rgba(255, 77, 77, 0.6);
+  background: rgba(13, 7, 0, 0.82);
+  color: var(--red);
+  line-height: 1.45;
+  text-align: right;
+}
+
+.hud-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.25rem, 1vw, 0.5rem);
+}
+
+.hud-hint {
+  align-self: center;
+  padding: 0.2rem 0.4rem;
+  background: rgba(13, 7, 0, 0.75);
+  font-family: var(--font-body);
+  font-size: clamp(0.48rem, 1.3vw, 0.72rem);
+}
+
+.hud-stat {
+  display: grid;
+  grid-template-columns: clamp(4.5rem, 14%, 7rem) minmax(3rem, 13rem) 2.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border);
+  background: rgba(13, 7, 0, 0.82);
+}
+
+.hud-bar {
+  height: 0.65rem;
+  border: 1px solid rgba(255, 157, 31, 0.5);
+  background: rgba(255, 157, 31, 0.15);
+}
+
+.hud-bar-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--orange);
+  transition: width 120ms linear;
+}
+
+#charge-fill {
+  background: var(--red);
+}
+
+.hud-value {
+  text-align: right;
+}
+
+#crosshair {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+#crosshair::before,
+#crosshair::after {
+  position: absolute;
+  background: var(--red);
+  box-shadow: var(--shadow-red);
+  content: "";
+}
+
+#crosshair::before {
+  top: 0.44rem;
+  width: 1rem;
+  height: 0.12rem;
+}
+
+#crosshair::after {
+  left: 0.44rem;
+  width: 0.12rem;
+  height: 1rem;
+}
+
+.feedback-flash {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#game-wrap.shot .feedback-flash {
+  animation: shot-flash 100ms ease-out;
+  background: rgba(255, 244, 214, 0.18);
+}
+
+#game-wrap.damaged .feedback-flash {
+  animation: damage-flash 220ms ease-out;
+  background: rgba(255, 0, 0, 0.35);
+}
+
+/* Green-gold blink when a pickup is grabbed - reads as "got something
+   good" without being as alarming as the red damage flash. */
+#game-wrap.pickup .feedback-flash {
+  animation: shot-flash 350ms ease-out;
+  background: rgba(80, 230, 120, 0.22);
+}
+
+/* Warm golden glow for the big moments: the SW33T CORE, the secret door,
+   the golden mango, and the typed sw33t protocol. */
+#game-wrap.sweet .feedback-flash,
+#game-wrap.secret .feedback-flash {
+  animation: sweet-flash 650ms ease-out;
+  background: rgba(255, 198, 64, 0.3);
+}
+
+#game-wrap.low-charge #charge-fill {
+  animation: charge-pulse 500ms ease-in-out 2;
+}
+
+@keyframes shot-flash {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes damage-flash {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes charge-pulse {
+  50% { filter: brightness(2); }
+}
+
+@keyframes sweet-flash {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.overlay-screen {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: none;
+  overflow-y: auto;
+  padding: clamp(1rem, 5vw, 3rem);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 7, 0, 0.96);
+  text-align: center;
+}
+
+.overlay-screen.visible {
+  display: flex;
+}
+
+.overlay-screen h2 {
+  margin-bottom: 0.7rem;
+}
+
+.overlay-screen p {
+  max-width: 34rem;
+}
+
+.overlay-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.control-list {
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.control-list li {
+  margin-bottom: 0.45rem;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 7rem;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--border);
+  color: var(--orange-soft);
+  font-family: var(--font-display);
+  text-align: center;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .touch-notice {
+    display: block;
+  }
+}
+
+@media (max-width: 40rem) {
+  .game-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #game-wrap {
+    aspect-ratio: 4 / 3;
+  }
+
+  .hud-exit {
+    display: none;
+  }
+
+  .hud-stat {
+    grid-template-columns: 4.2rem minmax(2rem, 1fr) 2.2rem;
+  }
+
+  .overlay-screen {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 25rem) {
+  .game-page {
+    padding-inline: 0.4rem;
+  }
+
+  .hud-hint {
+    display: none;
+  }
+
+  .overlay-screen p {
+    font-size: 0.85rem;
+  }
+}

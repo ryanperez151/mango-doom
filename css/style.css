@@ -1,268 +1,312 @@
-/*
-  MANGO.SYS stylesheet
-  Covers three "screens" the site moves through:
-    1. The boot terminal (typing animation)
-    2. The main menu (after boot finishes)
-    3. The content sections (NEW GAME, CREDITS, etc.)
-*/
+:root {
+  color-scheme: dark;
+  --bg: #1a0f00;
+  --bg-deep: #0d0700;
+  --panel: rgba(38, 21, 2, 0.88);
+  --orange: #ff9d1f;
+  --orange-soft: #ffc168;
+  --red: #ff4d4d;
+  --green: #52ff7a;
+  --muted: #c88942;
+  --border: rgba(255, 157, 31, 0.38);
+  --shadow-orange: 0 0 10px rgba(255, 157, 31, 0.4);
+  --shadow-red: 0 0 10px rgba(255, 77, 77, 0.5);
+  --font-body: "Courier New", Courier, monospace;
+  --font-display: "Lucida Console", Monaco, "Courier New", monospace;
+  --content-width: 72rem;
+}
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; /* padding/border count toward an element's width, not added on top */
+  box-sizing: border-box;
 }
 
-/* Dark background with a warm mango-orange text color instead of classic green */
+html {
+  min-width: 0;
+  scroll-behavior: smooth;
+}
+
 body {
-  background-color: #1a0f00; /* deep brown-black, like a shadowy mango crate */
-  color: #ff9d1f; /* mango orange */
-  font-family: 'Courier New', Courier, monospace;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(142, 62, 0, 0.18), transparent 45rem),
+    var(--bg);
+  color: var(--orange);
+  font-family: var(--font-body);
+  line-height: 1.65;
 }
 
-#terminal {
-  width: 80%;
-  max-width: 700px;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  /* subtle glow effect to make the orange text feel alive */
-  text-shadow: 0 0 6px rgba(255, 157, 31, 0.6);
-}
-
-#cursor {
-  display: inline-block;
-  width: 10px;
-  background-color: #ff9d1f;
-  animation: blink 1s step-start infinite;
-}
-
-/* Warning lines glow red instead of mango orange */
-.line-warning {
-  color: #ff3b3b;
-  text-shadow: 0 0 6px rgba(255, 59, 59, 0.6);
-}
-
-/* Success/system-ready lines glow green */
-.line-success {
-  color: #33ff66;
-  text-shadow: 0 0 6px rgba(51, 255, 102, 0.6);
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-#main-menu-btn {
-  display: none;
-  margin-top: 30px;
-  padding: 12px 30px;
-  background: transparent;
-  border: 2px solid #ff9d1f;
-  color: #ff9d1f;
-  font-family: inherit;
-  font-size: 1rem;
-  letter-spacing: 2px;
-  cursor: pointer;
-  text-shadow: 0 0 6px rgba(255, 157, 31, 0.6);
-  transition: background 0.2s, color 0.2s;
-}
-
-#main-menu-btn:hover {
-  background: #ff9d1f;
-  color: #1a0f00;
-}
-
-/* Simple fade-in used whenever the menu or a content section appears */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* ---------- Main menu ---------- */
-#main-menu {
-  display: none; /* JS switches this to "flex" once boot finishes */
-  flex-direction: column;
-  align-items: center;
-  z-index: 1;
-}
-
-#main-menu.visible {
-  display: flex;
-  animation: fadeIn 0.5s ease;
-}
-
-.menu-logo {
-  font-family: 'Press Start 2P', 'Courier New', monospace;
-  font-size: 2.4rem;
-  color: #ff3b3b;
-  text-shadow:
-    0 0 10px rgba(255, 59, 59, 0.85),
-    0 0 24px rgba(255, 157, 31, 0.5),
-    3px 3px 0 #1a0f00;
-  letter-spacing: 4px;
-  text-align: center;
-}
-
-.menu-subtitle {
-  font-family: 'Press Start 2P', 'Courier New', monospace;
-  font-size: 0.65rem;
-  color: #ff9d1f;
-  letter-spacing: 3px;
-  opacity: 0.75;
-  margin-top: 12px;
-  margin-bottom: 50px;
-}
-
-.menu-options {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-
-.menu-option {
-  font-family: 'Press Start 2P', 'Courier New', monospace;
-  font-size: 0.95rem;
-  color: #ff9d1f;
-  letter-spacing: 2px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: color 0.15s, transform 0.15s;
-}
-
-/* The little mango pointer next to each option — hidden until selected */
-.menu-option .pointer {
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-
-.menu-option.selected {
-  color: #ff3b3b;
-  text-shadow: 0 0 10px rgba(255, 59, 59, 0.8);
-  transform: translateX(8px); /* nudges the selected row to the right */
-}
-
-.menu-option.selected .pointer {
-  opacity: 1;
-}
-
-/* ---------- Content sections (NEW GAME, CREDITS, etc.) ---------- */
-#content-view {
-  display: none; /* JS switches this to "flex" when a menu option is picked */
-  flex-direction: column;
-  align-items: flex-start;
-  width: 85%;
-  max-width: 760px;
-  max-height: 82vh;
-  overflow-y: auto; /* lets long sections scroll instead of overflowing the screen */
-  z-index: 1;
-}
-
-#content-view.visible {
-  display: flex;
-  animation: fadeIn 0.4s ease;
-}
-
-.content-panel {
-  display: none; /* only the active section (see .active below) is shown */
-  width: 100%;
-}
-
-.content-panel.active {
-  display: block;
-}
-
-.content-panel h2 {
-  font-family: 'Press Start 2P', 'Courier New', monospace;
-  font-size: 1.4rem;
-  color: #ff3b3b;
-  text-shadow: 0 0 8px rgba(255, 59, 59, 0.7);
-  letter-spacing: 2px;
-  margin-bottom: 26px;
-}
-
-.content-panel p,
-.content-panel li {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #ff9d1f;
-}
-
-.content-panel p {
-  margin-bottom: 14px;
-}
-
-.content-panel ul.plain-list {
-  list-style: none;
-  margin-bottom: 14px;
-}
-
-.content-panel ul.plain-list li::before {
-  content: "» ";
-  color: #ff3b3b;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  font-family: 'Courier New', Courier, monospace;
-}
-
-.data-table th,
-.data-table td {
-  border: 1px solid rgba(255, 157, 31, 0.35);
-  padding: 8px 12px;
-  text-align: left;
-}
-
-.data-table th {
-  color: #ff3b3b;
-  text-shadow: 0 0 6px rgba(255, 59, 59, 0.6);
-}
-
-.back-btn {
-  margin-top: 20px;
-  padding: 10px 24px;
-  background: transparent;
-  border: 2px solid #ff9d1f;
-  color: #ff9d1f;
-  font-family: inherit;
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  cursor: pointer;
-  text-shadow: 0 0 6px rgba(255, 157, 31, 0.6);
-  transition: background 0.2s, color 0.2s;
-}
-
-.back-btn:hover {
-  background: #ff9d1f;
-  color: #1a0f00;
-}
-
-/* Faint scanline overlay across the whole screen for a retro CRT feel */
 body::before {
-  content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  z-index: 100;
+  inset: 0;
+  pointer-events: none;
+  content: "";
   background: repeating-linear-gradient(
     to bottom,
-    rgba(255, 157, 31, 0.03) 0px,
-    rgba(255, 157, 31, 0.03) 1px,
+    rgba(255, 157, 31, 0.025) 0,
+    rgba(255, 157, 31, 0.025) 1px,
     transparent 1px,
     transparent 3px
   );
-  pointer-events: none; /* lets clicks pass through to the button underneath */
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: var(--orange-soft);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: #fff0d8;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3 {
+  margin-block: 0 1rem;
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  color: var(--red);
+  font-size: clamp(2rem, 7vw, 4.8rem);
+  text-shadow: var(--shadow-red);
+}
+
+h2 {
+  color: var(--red);
+  font-size: clamp(1.35rem, 4vw, 2rem);
+  text-shadow: var(--shadow-red);
+}
+
+h3 {
+  color: var(--orange-soft);
+  font-size: clamp(1rem, 3vw, 1.25rem);
+}
+
+p {
+  margin-block: 0 1rem;
+}
+
+ul,
+dl {
+  margin-block: 0 1rem;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 1000;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.7rem 1rem;
+  transform: translateY(-150%);
+  border: 2px solid var(--orange);
+  background: var(--bg-deep);
+  color: var(--orange);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+:focus-visible {
+  outline: 3px solid #fff2cf;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(255, 77, 77, 0.55);
+}
+
+.button {
+  display: inline-flex;
+  min-height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.68rem 1rem;
+  border: 2px solid var(--orange);
+  background: rgba(13, 7, 0, 0.72);
+  color: var(--orange);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 150ms ease, background 150ms ease, transform 150ms ease;
+}
+
+.button:hover {
+  background: var(--orange);
+  color: var(--bg-deep);
+  transform: translateY(-1px);
+}
+
+.button-primary {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.button-primary:hover {
+  background: var(--red);
+  color: var(--bg-deep);
+}
+
+.eyebrow,
+.panel-kicker {
+  margin-bottom: 0.55rem;
+  color: var(--green);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.content-panel {
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  box-shadow: inset 0 0 2rem rgba(255, 157, 31, 0.035);
+  scroll-margin-top: 1rem;
+}
+
+.plain-list {
+  padding: 0;
+  list-style: none;
+}
+
+.plain-list li {
+  margin-bottom: 0.42rem;
+}
+
+.plain-list li::before {
+  color: var(--red);
+  content: "» ";
+}
+
+.char-card {
+  min-width: 0;
+}
+
+.char-name {
+  margin: 0;
+  color: var(--red);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 5vw, 2.3rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-shadow: var(--shadow-red);
+}
+
+.char-subtitle {
+  color: var(--orange-soft);
+}
+
+.char-quote {
+  padding-left: 1rem;
+  border-left: 2px solid var(--border);
+  font-style: italic;
+}
+
+.char-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1.5rem;
+}
+
+.char-meta > div {
+  display: grid;
+  grid-template-columns: minmax(5rem, auto) minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(255, 157, 31, 0.18);
+}
+
+.char-meta dt {
+  color: var(--red);
+}
+
+.char-meta dd {
+  min-width: 0;
+  margin: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.noscript-note {
+  position: fixed;
+  z-index: 200;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--green);
+  background: var(--bg-deep);
+  color: var(--green);
+}
+
+@media (max-width: 42rem) {
+  .char-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  body::before {
+    display: none;
+  }
 }

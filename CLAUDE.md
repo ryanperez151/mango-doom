@@ -8,40 +8,39 @@ skinned in the same theme.
 ## Stack
 
 Vanilla HTML/CSS/JS, no frameworks until necessary. GitHub Pages or
-Cloudflare hosting. No backend/database yet — LEADERBOARD is static
-placeholder data for now; only add a real backend (or serverless function)
-once persistent scores are actually needed.
+Cloudflare hosting. No backend/database or leaderboard yet; only add persistent
+scores after their product and privacy requirements are defined.
 
 ## Site map
 
-`index.html` is the hub: boot sequence → main menu. Each menu option leads
-somewhere:
+`index.html` is the progressively enhanced hub: optional boot sequence →
+professional summary, primary actions, and hash-addressable sections. Core
+portfolio content must remain readable when JavaScript is disabled.
 
-| Menu option      | Destination                                                                                                                                                                                                                         |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| NEW GAME         | `game.html` — the raycaster shooter                                                                                                                                                                                                 |
-| CREDITS          | inline content panel in `index.html`                                                                                                                                                                                                |
-| CHARACTER SHEETS | inline panel in `index.html` (short version) — doubles as the resume/bio ("operator profile"); links out to `resume.html` for the full version                                                                                      |
-| LEADERBOARD      | inline content panel in `index.html` — game high scores                                                                                                                                                                             |
-| EXTRAS           | inline content panel in `index.html` — catch-all index for everything outside the game: blog posts (`blog/`), technical project write-ups (`projects/`), and whatever else doesn't have its own menu slot, each its own linked page |
-
-This mapping is a starting point, not locked in — CHARACTER SHEETS = resume
-and EXTRAS = the everything-else bucket. Revisit if it stops making sense as
-content grows.
+| Section | Destination |
+| --- | --- |
+| Character Sheet — Résumé | `#profile`, linking to the full `resume.html` |
+| Missions — Security Projects | `#projects`, with full case studies under `projects/` |
+| New Game — Playable Demo | `#game`, linking to `game.html` |
+| Summon — Contact | `#contact` |
+| Credits — About This Site | `#credits` |
 
 ## File structure
 
 ```
-index.html          boot sequence + main menu + inline sections
-game.html            the raycaster shooter (in progress)
+index.html          optional boot + portfolio hero + hash sections
+game.html            the raycaster shooter — first playable version (one level, one enemy type)
 resume.html          full resume/CV, linked from the CHARACTER SHEETS panel
-projects/            one .html file per technical project write-up, indexed from EXTRAS
-blog/                one .html file per blog post, indexed from EXTRAS
-css/style.css        shared styles across all pages
+projects/            one .html file per verified technical project write-up
+blog/                one .html file per future blog post
+css/style.css        shared tokens, controls, and accessibility styles
+css/home.css         landing page and project index styles
+css/resume.css       resume and long-form case-study styles
+css/game.css         raycaster viewport, HUD, and overlay styles
 js/boot.js           boot terminal typing animation (index.html only)
 js/menu.js           main menu + content panel switching (index.html only)
-js/raycaster.js      the game's rendering engine (game.html)
-js/game.js           game loop, state, entities (game.html) — add once the game takes shape
+js/raycaster.js      the game's rendering engine — map data, DDA raycasting, wall + sprite drawing (game.html only)
+js/game.js           game loop, player/enemy state, input, AI, win/lose flow (game.html only)
 assets/textures, assets/sounds   game assets
 assets/images         portfolio images (headshot, project screenshots, etc.)
 ```

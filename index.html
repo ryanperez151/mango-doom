@@ -1,101 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8" />
-  <title>MANGO.SYS</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Ryan Perez is a North Carolina cybersecurity analyst specializing in incident response, network forensics, threat investigation, and security operations." />
+  <meta name="theme-color" content="#1a0f00" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Ryan Perez | Cybersecurity Analyst | MANGO.SYS" />
+  <meta property="og:description" content="Cybersecurity experience, certifications, projects, and a playable retro firewall mission." />
+  <title>Ryan Perez | Cybersecurity Analyst | MANGO.SYS</title>
+  <link rel="canonical" href="https://mangosec.xyz/" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/home.css" />
+  <script>
+    document.documentElement.classList.replace("no-js", "js");
+    try {
+      if (sessionStorage.getItem("mangoSys.bootSeen") === "true" || window.location.hash) {
+        document.documentElement.classList.add("boot-complete");
+      }
+    } catch (error) {
+      // The portfolio remains usable when storage is unavailable.
+    }
+  </script>
 </head>
-<body>
+<body id="top">
+  <a class="skip-link" href="#portfolio">Skip to portfolio</a>
 
-  <div id="terminal"></div>
-  <button id="main-menu-btn">ENTER MAIN MENU</button>
+  <section class="boot-screen" id="boot-screen" aria-labelledby="boot-title">
+    <h2 class="sr-only" id="boot-title">MANGO.SYS startup</h2>
+    <div id="terminal" aria-hidden="true"></div>
+    <p class="sr-only">A decorative firewall startup sequence is playing. You can skip it at any time.</p>
+    <button class="button button-primary" id="main-menu-btn" type="button">SKIP BOOT / VIEW PORTFOLIO</button>
+  </section>
 
-  <div id="main-menu">
-    <div class="menu-logo">MANGO DOOM</div>
-    <div class="menu-subtitle">— MAIN MENU —</div>
-    <ul class="menu-options">
-      <li class="menu-option selected" data-section="newgame">
-        <span class="pointer">🥭</span><span class="label">NEW GAME</span>
-      </li>
-      <li class="menu-option" data-section="credits">
-        <span class="pointer">🥭</span><span class="label">CREDITS</span>
-      </li>
-      <li class="menu-option" data-section="characters">
-        <span class="pointer">🥭</span><span class="label">CHARACTER SHEETS</span>
-      </li>
-      <li class="menu-option" data-section="leaderboard">
-        <span class="pointer">🥭</span><span class="label">LEADERBOARD</span>
-      </li>
-      <li class="menu-option" data-section="extras">
-        <span class="pointer">🥭</span><span class="label">EXTRAS</span>
-      </li>
-    </ul>
-  </div>
-
-  <div id="content-view">
-    <section class="content-panel" id="section-newgame">
-      <h2>NEW GAME</h2>
-      <p>Initializing new campaign...</p>
-      <p>Every great hunt starts with a single ripe target. Choose your loadout, sharpen your blade, and step into the orchard. The rot doesn't sleep, and neither does MANGO.SYS.</p>
-      <p>(Campaign launch coming soon.)</p>
-      <button class="back-btn">◄ BACK TO MENU</button>
-    </section>
-
-    <section class="content-panel" id="section-credits">
-      <h2>CREDITS</h2>
-      <ul class="plain-list">
-        <li>Created &amp; coded by Ryan Perez</li>
-        <li>Built with HTML, CSS &amp; vanilla JavaScript</li>
-        <li>Inspired by id Software's DOOM (1993)</li>
-        <li>Mango-themed everything, because why not</li>
-        <li>Thanks for playing</li>
+  <main class="portfolio-shell" id="portfolio">
+    <header class="hero">
+      <p class="eyebrow">MANGO.SYS // OPERATOR PROFILE</p>
+      <h1>Ryan Perez</h1>
+      <p class="hero-role">Cybersecurity Analyst · Incident Response · Network Forensics</p>
+      <p class="hero-summary">
+        North Carolina security professional who investigates threats from packet analysis
+        through malware response, builds practical defenses, and helps teams understand
+        the systems they protect.
+      </p>
+      <ul class="credential-strip" aria-label="Selected certifications">
+        <li>GCFA</li>
+        <li>GNFA</li>
+        <li>GCFR</li>
+        <li>Security+</li>
       </ul>
-      <button class="back-btn">◄ BACK TO MENU</button>
-    </section>
+      <div class="hero-actions">
+        <a class="button button-primary" href="resume.html">View Résumé</a>
+        <a class="button" href="#projects">View Projects</a>
+        <a class="button" href="game.html">Play Game</a>
+        <a class="button" href="#contact">Contact</a>
+      </div>
+    </header>
 
-    <section class="content-panel" id="section-characters">
-      <h2>CHARACTER SHEETS</h2>
-      <table class="data-table">
-        <thead>
-          <tr><th>Name</th><th>Class</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Operator Ryan</td><td>Orchard Guardian</td><td>Active</td></tr>
-          <tr><td>???</td><td>???</td><td>Locked</td></tr>
-        </tbody>
-      </table>
-      <p>More operators coming soon.</p>
-      <button class="back-btn">◄ BACK TO MENU</button>
-    </section>
+    <nav class="section-nav" aria-label="Portfolio sections">
+      <p class="section-nav-label">SELECT DATABASE</p>
+      <ul class="menu-options">
+        <li><a class="menu-option" href="#profile"><span aria-hidden="true">🥭</span> Character Sheet — Résumé</a></li>
+        <li><a class="menu-option" href="#projects"><span aria-hidden="true">🥭</span> Missions — Security Projects</a></li>
+        <li><a class="menu-option" href="#game"><span aria-hidden="true">🥭</span> New Game — Playable Demo</a></li>
+        <li><a class="menu-option" href="#contact"><span aria-hidden="true">🥭</span> Summon — Contact</a></li>
+        <li><a class="menu-option" href="#credits"><span aria-hidden="true">🥭</span> Credits — About This Site</a></li>
+      </ul>
+    </nav>
 
-    <section class="content-panel" id="section-leaderboard">
-      <h2>LEADERBOARD</h2>
-      <table class="data-table">
-        <thead>
-          <tr><th>Rank</th><th>Operator</th><th>Score</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>—</td><td>No scores yet</td><td>—</td></tr>
-        </tbody>
-      </table>
-      <p>Be the first to make the board.</p>
-      <button class="back-btn">◄ BACK TO MENU</button>
-    </section>
+    <div class="content-view" id="content-view">
+      <section class="content-panel" id="profile" tabindex="-1">
+        <p class="panel-kicker">DATABASE: PERSONNEL</p>
+        <h2>Character Sheet — Résumé</h2>
+        <div class="char-card">
+          <div>
+            <p class="char-name">MANGOBYTE</p>
+            <p class="char-subtitle">Ryan Perez — Cyber Bard &amp; Mango Connoisseur</p>
+          </div>
+          <p class="char-quote">“I enjoy working with technology; especially knowing how to break and fix so I can help out others. Mangos are pretty neat too.”</p>
+          <dl class="char-meta">
+            <div><dt>Role</dt><dd>Senior Information Security Analyst</dd></div>
+            <div><dt>Base</dt><dd>North Carolina, USA</dd></div>
+            <div><dt>Focus</dt><dd>Incident response &amp; forensics</dd></div>
+            <div><dt>Tools</dt><dd>SIEM, SOAR, XDR &amp; network analysis</dd></div>
+          </dl>
+        </div>
+        <div class="panel-actions">
+          <a class="button button-primary" href="resume.html">View Full Character Sheet</a>
+          <a class="button back-to-menu" href="#top">Back to Top</a>
+        </div>
+      </section>
 
-    <section class="content-panel" id="section-extras">
-      <h2>EXTRAS</h2>
-      <p><strong>LOG 001 — SYSTEM GENESIS</strong><br />MANGO.SYS comes online. Orchard perimeter secured.</p>
-      <p><strong>LOG 002 — FIRST HARVEST</strong><br />Initial threat signatures synced. Ripeness detection engine calibrated.</p>
-      <p><strong>LOG 003 — CLASSIFIED</strong><br />[ REDACTED ]</p>
-      <button class="back-btn">◄ BACK TO MENU</button>
-    </section>
-  </div>
+      <section class="content-panel" id="projects" tabindex="-1">
+        <p class="panel-kicker">DATABASE: MISSIONS</p>
+        <h2>Missions — Security Projects</h2>
+        <p>Public case studies document only work that can be shared safely. Employer-confidential details, unsupported metrics, and invented outcomes are intentionally excluded.</p>
+
+        <article class="project-card">
+          <div class="project-heading">
+            <h3>MANGO.SYS Interactive Security Portfolio</h3>
+            <span class="status-tag">ACTIVE MISSION</span>
+          </div>
+          <dl class="case-study-grid">
+            <div><dt>Problem</dt><dd>Present cybersecurity experience in a memorable format without hiding essential professional information.</dd></div>
+            <div><dt>Constraints</dt><dd>Static hosting, vanilla web technologies, progressive enhancement, accessibility, and no backend.</dd></div>
+            <div><dt>Implementation</dt><dd>A semantic portfolio shell paired with an original canvas raycaster themed as a compromised firewall.</dd></div>
+            <div><dt>Tools</dt><dd>HTML, CSS, JavaScript, Canvas 2D, DDA raycasting, and Git.</dd></div>
+            <div><dt>Outcome</dt><dd>A responsive professional portfolio with an optional playable security-themed mission.</dd></div>
+          </dl>
+          <div class="project-links">
+            <a href="projects/mango-sys.html">Read Case Study</a>
+            <a href="game.html">Launch Demo</a>
+            <a href="https://github.com/ryanperez151" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+          </div>
+        </article>
+
+        <article class="project-card project-card-pending">
+          <div class="project-heading">
+            <h3>Additional Security Case Studies</h3>
+            <span class="status-tag status-pending">CONTENT PENDING</span>
+          </div>
+          <p>Future case studies will be published here after their facts, screenshots, disclosure boundaries, and outcomes are verified by the owner.</p>
+        </article>
+        <a class="button back-to-menu" href="#top">Back to Top</a>
+      </section>
+
+      <section class="content-panel" id="game" tabindex="-1">
+        <p class="panel-kicker">DATABASE: PESTICIDE-DMZ</p>
+        <h2>New Game — Playable Demo</h2>
+        <p>Eth2/PESTICIDE-DMZ is crawling with rotten packets. Navigate the perimeter, manage firewall charge, and purge six threats from the orchard.</p>
+        <p>The current mission is designed for a keyboard and mouse. Touch-only visitors receive a clear platform notice before launch.</p>
+        <div class="panel-actions">
+          <a class="button button-primary" href="game.html">Start Mission</a>
+          <a class="button back-to-menu" href="#top">Back to Top</a>
+        </div>
+      </section>
+
+      <section class="content-panel" id="contact" tabindex="-1">
+        <p class="panel-kicker">DATABASE: COMMS</p>
+        <h2>Summon — Contact</h2>
+        <p>Connect about cybersecurity operations, incident response, network forensics, or technical collaboration.</p>
+        <ul class="contact-list">
+          <li><a href="mailto:ryan@mangosec.xyz">ryan@mangosec.xyz</a></li>
+          <li><a href="tel:+17046661013">(704) 666-1013</a></li>
+          <li><a href="https://github.com/ryanperez151" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/ryanperez-in/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        </ul>
+        <a class="button back-to-menu" href="#top">Back to Top</a>
+      </section>
+
+      <section class="content-panel" id="credits" tabindex="-1">
+        <p class="panel-kicker">DATABASE: CREDITS</p>
+        <h2>Credits — About This Site</h2>
+        <ul class="plain-list">
+          <li>Created and coded by Ryan Perez</li>
+          <li>Built with semantic HTML, CSS, and vanilla JavaScript</li>
+          <li>Raycaster inspired by the techniques behind classic first-person games</li>
+          <li>Mango-themed everything, because why not</li>
+        </ul>
+        <button class="button" id="replay-boot" type="button">Replay Boot Sequence</button>
+        <a class="button back-to-menu" href="#top">Back to Top</a>
+      </section>
+    </div>
+  </main>
+
+  <noscript>
+    <div class="noscript-note">
+      JavaScript is disabled. The full portfolio remains available; only the decorative boot sequence and game require JavaScript.
+    </div>
+  </noscript>
 
   <script src="js/boot.js"></script>
   <script src="js/menu.js"></script>
-
 </body>
 </html>
