@@ -1221,7 +1221,31 @@ Run every gate, confirm the engine harness in a browser, and update the two stru
 - Modify: `README.md`
 - Modify: `CLAUDE.md`
 
-- [ ] **Step 1: Run the complete offline validation suite**
+- [ ] **Step 1: Register the new view modules in the safety content scanner**
+
+The safety content scanner walks a fixed file list; the two new view modules must be added so the forbidden-pattern / synthetic / `.invalid` / documentation-IP / secret checks actually cover the new rendering code. In `tests/validate-ctf-content.ps1`, in the `$relativeRuntimeFiles` array (around lines 27–42), add these two entries immediately after the `'js\ctf\app.js',` line (note backslash separators to match the existing entries):
+
+```powershell
+    'js\ctf\console-view.js',
+    'js\ctf\siem-view.js',
+```
+
+This only ADDS files to the scan set — it strengthens safety coverage and changes no check. Then run the full validator (which invokes the content scanner) to confirm the two modules pass:
+
+```bash
+powershell -ExecutionPolicy Bypass -File tests/validate-ctf.ps1
+```
+
+Expected: PASS. The modules use only `createElement` + `textContent`, reference no hosts/IPs, and contain no forbidden patterns or secrets, so they satisfy every content check. Commit this on its own:
+
+```bash
+git add tests/validate-ctf-content.ps1
+git commit -m "test(ctf): scan console-view and siem-view in the safety content validator
+
+Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
+```
+
+- [ ] **Step 2: Run the complete offline validation suite**
 
 Run each and confirm success:
 ```bash
@@ -1232,11 +1256,11 @@ node tests/run-site-browser-smoke.mjs
 ```
 Expected: all pass. `validate-ctf.ps1` must still report clean (no data/content changed). The smoke test prints its pass line including the keyboard focus sequence.
 
-- [ ] **Step 2: Confirm the engine harness in a browser**
+- [ ] **Step 3: Confirm the engine harness in a browser**
 
 Open `tests/ctf-engine.html` in a browser and confirm it reads **42 passed / 0 failed** (this plan changed no engine code, so the count is unchanged).
 
-- [ ] **Step 3: Update `README.md`**
+- [ ] **Step 4: Update `README.md`**
 
 In the file-structure/site-map section, under the `js/ctf/` listing, add the two new modules and note the skins. Add these lines alongside the existing `app.js` entry:
 ```
@@ -1245,11 +1269,11 @@ In the file-structure/site-map section, under the `js/ctf/` listing, add the two
 ```
 And add one sentence to the CTF description: "The threat track renders as an operator console and the defender track as a structured mock SIEM; both are pure presentation over the same allowlisted engine, with no command entry or free-text search."
 
-- [ ] **Step 4: Update `CLAUDE.md`**
+- [ ] **Step 5: Update `CLAUDE.md`**
 
 Mirror the same two-line addition under the `js/ctf/` block in the File structure section, and add `console-view.js` / `siem-view.js` to the "single entry point app.js" note so the module map stays accurate. (README wins on any conflict.)
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 6: Commit the docs**
 
 ```bash
 git add README.md CLAUDE.md
@@ -1258,7 +1282,7 @@ git commit -m "docs(ctf): record console + SIEM per-track surfaces
 Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>"
 ```
 
-- [ ] **Step 6: Final safety self-check against `docs/ctf-safety.md`**
+- [ ] **Step 7: Final safety self-check against `docs/ctf-safety.md`**
 
 Confirm by inspection (no code change expected): the workspace exposes zero command/target/free-text inputs (only radios, the two `datetime-local` inputs, and the inert note textareas); no `innerHTML`/`eval`/dynamic import/`fetch` was introduced in `console-view.js`, `siem-view.js`, or `app.js`; every telemetry row still shows its synthetic tag; and no new scenario/telemetry content strings were added. Record the result in the PR description when the branch is finished.
 
