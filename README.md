@@ -17,7 +17,7 @@ for quick visual checks.
 
 ## Site structure
 
-- `index.html` — portfolio landing page, boot sequence, and hash-addressable sections
+- `index.html` — portfolio landing page, boot sequence, mission-card launch bay, and scannable sections with a sticky scroll-spy nav
 - `resume.html` — complete résumé and contact information
 - `projects/mango-sys.html` — verified MANGO.SYS project case study
 - `game.html` — playable PESTICIDE-DMZ raycaster
@@ -26,7 +26,7 @@ for quick visual checks.
 - `css/ctf.css` — responsive CTF workspace, evidence, timeline, and debrief styles
 - `css/home.css`, `css/resume.css`, `css/game.css` — page-specific layouts
 - `js/boot.js` — optional boot animation and `mangoSys.bootSeen` session flag
-- `js/menu.js` — progressive hash navigation and focus management
+- `js/menu.js` — sticky section-nav scroll-spy and boot-replay hook
 - `js/raycaster.js`, `js/game.js` — rendering engine and game state
 - `js/ctf/` — validated CTF engine, local-save contract, and page controller
 
