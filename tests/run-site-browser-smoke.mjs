@@ -219,11 +219,13 @@ async function run() {
       visible: !document.querySelector('#ctf-workspace').hidden,
       focused: document.activeElement?.id,
       scrollWidth: document.documentElement.scrollWidth,
+      skin: document.querySelector('#ctf-workspace').className,
       saveKeys: Object.keys(localStorage)
     })`);
     assert.equal(workspace.visible, true);
     assert.equal(workspace.focused, "node-title");
     assert.equal(workspace.scrollWidth, 320);
+    assert.ok(workspace.skin.includes("ctf-skin-console"), "Threat track did not apply the console skin class");
     assert.ok(workspace.saveKeys.some((key) => key.startsWith("mangoSys.ctf")), "Starting did not create a versioned local save");
 
     await inspect("document.querySelector('#ctf-reset').click()");
