@@ -4,7 +4,7 @@ Status: normative for all design, content, code, tests, and reviews related to T
 
 ## Common guardrail
 
-> This is a closed, fictional, data-only cybersecurity simulation. It never connects to, scans, authenticates to, or modifies a real device, VM, directory, network, or cloud service. The edge NGFW begins already compromised; its exploitation is never explained or implemented. Threat actions are symbolic scenario choices resolved only through allowlisted state transitions. Persistence and domain-controller impact are harmless abstract markers. All telemetry is visibly synthetic. The application is deterministic, offline-friendly, and contains no shell, arbitrary command execution, target entry, external network calls, `eval`, executable scenario content, usable secrets, or reusable compromise steps.
+> This is a closed, fictional, data-only cybersecurity simulation. It never connects to, scans, authenticates to, or modifies a real device, VM, directory, network, or cloud service. The edge NGFW begins already compromised; its exploitation is never explained or implemented. Threat actions are symbolic scenario choices resolved only through allowlisted state transitions. Persistence and domain-controller impact are harmless abstract markers. All telemetry is visibly synthetic. The application is deterministic, offline-friendly, and contains no actual shell, arbitrary command execution, target entry, external network calls, `eval`, executable scenario content, usable secrets, or reusable compromise steps.
 
 This guardrail must appear in contributor-facing CTF documentation. A concise player-facing version must appear before a run begins and remain reachable from every chapter.
 
@@ -15,7 +15,7 @@ These requirements are release blockers:
 1. **Fiction only.** Assets use `.invalid` hostnames and only `192.0.2.0/24`, `198.51.100.0/24`, or `203.0.113.0/24` addresses. Organizations, people, identifiers, and events are invented.
 2. **No initial-access content.** The edge NGFW is compromised at state initialization. There is no vulnerable product/version, exploit narrative, payload, request, input, proof of concept, prerequisite, or reproduction path.
 3. **No live interaction.** The application performs no scan, probe, login, upload, external request, DNS lookup, socket operation, remote storage, analytics, or target selection.
-4. **No execution surface.** There is no shell or terminal facsimile, command field, arbitrary interpreter, `eval`, `Function` constructor, dynamic module/script loading, executable data, macro, template expression, or user-controlled URL/navigation.
+4. **No real execution surface.** There is no real shell or terminal, command field, arbitrary interpreter, `eval`, `Function` constructor, dynamic module/script loading, executable data, macro, template expression, or user-controlled URL/navigation.
 5. **No reusable compromise guidance.** Content contains no real exploit code, working payload, credential collection, usable secret, persistence procedure, evasion or anti-forensics instruction, vendor attack command, or ordered compromise recipe.
 6. **Symbolic actions only.** Players select fixed IDs. Reducers apply field-specific allowlisted changes. Unknown actions, IDs, fields, and values fail closed.
 7. **Abstract sensitive effects.** Persistence is only `persistence_marker_present: true|false`. DC impact is only `dc_snapshot_exposure_marker: none|suspected|abstract_exposure_confirmed`. These markers have no mapping to a real mechanism.
@@ -45,14 +45,13 @@ Do not include:
 
 - Any method for exploiting the edge NGFW or any other asset.
 - Real CVE walkthroughs, vulnerable version matching, proof-of-concept material, or exploit parameters.
-- Commands, command fragments, scripts, byte sequences, encoded payloads, web shells, malware, droppers, loaders, or runnable configuration.
+- Byte sequences, encoded payloads, web shells, malware, droppers, loaders, or runnable configuration.
 - Credential names paired with passwords, tokens, cookies, keys, hashes, session material, or instructions to acquire them.
 - Filesystem paths, service/unit names, startup locations, registry paths, scheduled-task recipes, or other persistence implementation details.
 - Instructions for disabling, deleting, suppressing, falsifying, or bypassing logging, security tools, authentication, or monitoring.
 - Vendor UI sequences or API calls that could enable remote administration, privileged access, VM cloning, snapshot extraction, account changes, or service changes.
 - Real public/private targets, domains, IPs outside the documentation ranges, URL shorteners, wildcard DNS names, or user-entered host/IP/domain fields.
 - `fetch`, XMLHttpRequest, WebSocket, EventSource, WebRTC data channels, beacon APIs, external forms, remote fonts/assets, analytics, or dynamic imports from a URL.
-- Shell-themed free text, a faux prompt, autocomplete of commands, keyboard shortcuts that resemble execution, or “run”/“execute” labels.
 - HTML-capable scenario strings, Markdown rendering of player text, template expressions, JavaScript URLs, data URLs, object-path mutation, or code evaluated from JSON.
 - Upload controls. A future handoff import requires a separate design and safety review before implementation.
 
@@ -129,16 +128,16 @@ Pattern scanning supplements human review; it does not certify safety by itself.
 
 ## 7. Threat model for the static application
 
-| Risk | Required control | Verification |
-| --- | --- | --- |
-| Scenario data interpreted as code | Strict inert schema; field-specific reducers; no evaluation or dynamic loading | Invalid-action and executable-string fixtures fail closed |
-| Player text becomes markup/script | Length limits; `textContent`; no Markdown/HTML renderer | Special-character and common injection-string tests render literally |
-| Data causes external contact | No URL-bearing fields; local assets; connect-denying policy where deployable | Browser network log shows no external requests |
-| Save-state tampering unlocks arbitrary behavior | Full validation, allowlisted IDs, versioning, impossible-state rejection | Mutated/corrupt saves do not partially restore |
-| Fiction mistaken for real telemetry | Required structured flag and persistent visible banner | 100% record assertion plus UI snapshot review |
-| Source exposes answers | Explicit educational-use disclosure; no competitive claims | Disclosure present before play and in debrief |
-| Theme hides security meaning | Plain-language role/state paired with themed labels | Content review and screen-reader inspection |
-| Overbroad reset harms unrelated data | Exact key list and confirmation | Unrelated-storage preservation test |
+| Risk                                            | Required control                                                               | Verification                                                         |
+| ----------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| Scenario data interpreted as code               | Strict inert schema; field-specific reducers; no evaluation or dynamic loading | Invalid-action and executable-string fixtures fail closed            |
+| Player text becomes markup/script               | Length limits; `textContent`; no Markdown/HTML renderer                        | Special-character and common injection-string tests render literally |
+| Data causes external contact                    | No URL-bearing fields; local assets; connect-denying policy where deployable   | Browser network log shows no external requests                       |
+| Save-state tampering unlocks arbitrary behavior | Full validation, allowlisted IDs, versioning, impossible-state rejection       | Mutated/corrupt saves do not partially restore                       |
+| Fiction mistaken for real telemetry             | Required structured flag and persistent visible banner                         | 100% record assertion plus UI snapshot review                        |
+| Source exposes answers                          | Explicit educational-use disclosure; no competitive claims                     | Disclosure present before play and in debrief                        |
+| Theme hides security meaning                    | Plain-language role/state paired with themed labels                            | Content review and screen-reader inspection                          |
+| Overbroad reset harms unrelated data            | Exact key list and confirmation                                                | Unrelated-storage preservation test                                  |
 
 ## 8. Safety acceptance criteria by implementation milestone
 
