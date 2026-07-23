@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CTF engine validation</title>
+  <style>
+    body { max-width: 60rem; margin: 2rem auto; padding: 0 1rem; color: #fff4d6; background: #1a0f00; font: 1rem/1.5 monospace; }
+    h1, [data-result="pass"], [data-status="pass"] { color: #ff9d1f; }
+    [data-result="fail"], [data-status="fail"] { color: #ff6b6b; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>CTF deterministic engine validation</h1>
+    <p>This local page tests inert fictional scenario data. It makes no external requests.</p>
+    <p id="test-summary" role="status">Tests are loading.</p>
+    <ol id="test-results"></ol>
+    <noscript>JavaScript is required to run this developer validation page.</noscript>
+  </main>
+  <script type="module" src="ctf-engine.test.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "schema_version": 1,
+    "scenario_family": "mango_keep",
+    "synthetic": true,
+    "mapping_count": 27,
+    "purpose": "Links inert learner evidence to synthetic telemetry events and scenario nodes without adding executable behavior."
+  },
+  "mappings": [
+    { "evidence_id": "ev_edge_premise", "event_ids": ["tel_0001"], "node_ids": ["p1_edge_context"] },
+    { "evidence_id": "ev_edge_visibility_gap", "event_ids": ["tel_0004"], "node_ids": ["p1_edge_context"] },
+    { "evidence_id": "ev_trust_relationship", "event_ids": ["tel_0028"], "node_ids": ["p2_trust_path"] },
+    { "evidence_id": "ev_identity_relationship", "event_ids": ["tel_0027"], "node_ids": ["p2_trust_path"] },
+    { "evidence_id": "ev_hypervisor_transition", "event_ids": ["tel_0041"], "node_ids": ["p3_transition"] },
+    { "evidence_id": "ev_change_window", "event_ids": ["tel_0043"], "node_ids": ["p3_transition"] },
+    { "evidence_id": "ev_vm_inventory", "event_ids": ["tel_0067"], "node_ids": ["p4_inventory"] },
+    { "evidence_id": "ev_decoy_signal", "event_ids": ["tel_0070"], "node_ids": ["p4_inventory"] },
+    { "evidence_id": "ev_persistence_marker", "event_ids": ["tel_0090"], "node_ids": ["p5_marker_review"] },
+    { "evidence_id": "ev_maintenance_baseline", "event_ids": ["tel_0096"], "node_ids": ["p5_marker_review"] },
+    { "evidence_id": "ev_dc_marker", "event_ids": ["tel_0105"], "node_ids": ["p6_dc_marker"] },
+    { "evidence_id": "ev_dc_scope_note", "event_ids": ["tel_0111"], "node_ids": ["p6_dc_marker"] },
+    { "evidence_id": "ev_containment_map", "event_ids": ["tel_0122"], "node_ids": ["p7_containment"] },
+    { "evidence_id": "ev_recovery_note", "event_ids": ["tel_0144"], "node_ids": ["p7_checkpoint"] },
+
+    { "evidence_id": "ir_initial_edge_alert", "event_ids": ["tel_0001"], "node_ids": ["ir_edge_triage"] },
+    { "evidence_id": "ir_edge_admin_session", "event_ids": ["tel_0001"], "node_ids": ["ir_edge_finding"] },
+    { "evidence_id": "ir_edge_config_change", "event_ids": ["tel_0026"], "node_ids": ["ir_edge_finding"] },
+    { "evidence_id": "ir_esxi_flow", "event_ids": ["tel_0028"], "node_ids": ["ir_esxi_finding"] },
+    { "evidence_id": "ir_esxi_auth", "event_ids": ["tel_0041"], "node_ids": ["ir_esxi_finding"] },
+    { "evidence_id": "ir_persistence_marker", "event_ids": ["tel_0090"], "node_ids": ["ir_persistence_finding"] },
+    { "evidence_id": "ir_restart_survival", "event_ids": ["tel_0096"], "node_ids": ["ir_persistence_finding"] },
+    { "evidence_id": "ir_vcenter_task", "event_ids": ["tel_0067"], "node_ids": ["ir_dc_access_finding"] },
+    { "evidence_id": "ir_vm_uuid_map", "event_ids": ["tel_0068"], "node_ids": ["ir_dc_access_finding"] },
+    { "evidence_id": "ir_guest_operation", "event_ids": ["tel_0105"], "node_ids": ["ir_dc_impact_finding"] },
+    { "evidence_id": "ir_identity_change", "event_ids": ["tel_0111"], "node_ids": ["ir_dc_impact_finding"] },
+    { "evidence_id": "ir_shared_indicator", "event_ids": ["tel_0107"], "node_ids": ["ir_wider_scope"] },
+    { "evidence_id": "ir_additional_identity", "event_ids": ["tel_0112"], "node_ids": ["ir_wider_scope"] }
+  ]
+}

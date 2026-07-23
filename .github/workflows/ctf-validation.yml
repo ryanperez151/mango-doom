@@ -1,0 +1,42 @@
+name: CTF validation
+
+# Runs the offline CTF safety validators and the engine / playthrough tests on
+# every push and pull request, so the safety contract (docs/ctf-safety.md) is
+# enforced automatically instead of only by hand. These are the same checks
+# documented in CLAUDE.md and README.md.
+#
+# Runner note: the PowerShell validators hardcode Windows-style relative paths
+# (e.g. 'data\ctf\telemetry.js'), so this job runs on windows-latest. The
+# browser smoke test (tests/run-site-browser-smoke.mjs) depends on Chrome at a
+# fixed local path, so it stays a local/manual check and is not run here.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Static safety validators (telemetry + content)
+        shell: pwsh
+        run: .\tests\validate-ctf.ps1
+
+      - name: Engine unit tests (expect 42 passed, 0 failed)
+        run: node tests/run-ctf-engine.mjs
+
+      - name: Full playthrough audit (6 routes)
+        run: node tests/run-ctf-playthroughs.mjs

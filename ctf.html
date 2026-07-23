@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Content Security Policy: keep this page self-contained — only same-origin
+       CSS/JS, and block every network connection. Reinforces the offline design. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+  <meta name="description" content="Play The Mango Keep Incident, a fictional and inert incident-response learning simulation from MANGO.SYS." />
+  <meta name="theme-color" content="#1a0f00" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="The Mango Keep Incident | MANGO.SYS CTF" />
+  <meta property="og:description" content="A fictional, inert incident-response tabletop. All events are synthetic; no real systems, targets, credentials, or commands." />
+  <title>The Mango Keep Incident | MANGO.SYS CTF</title>
+  <!-- No <link rel="canonical"> here on purpose: the CTF content validator seals
+       ctf.html against any remote href/src (it must reference nothing external).
+       ctf.html is still indexed via sitemap.xml. -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/ctf.css" />
+  <script>document.documentElement.classList.replace("no-js", "js");</script>
+</head>
+<body class="ctf-page">
+  <a class="skip-link" href="#ctf-main">Skip to simulation</a>
+
+  <header class="ctf-header">
+    <div>
+      <p class="eyebrow">MANGO.SYS // INCIDENT ARCHIVE</p>
+      <h1>The Mango Keep Incident</h1>
+      <p class="ctf-subtitle">Choose-your-own-adventure security tabletop</p>
+    </div>
+    <a class="button" href="index.html">Return to Portfolio</a>
+  </header>
+
+  <p class="ctf-safety-label" role="status">
+    FICTIONAL, INERT SIMULATION — ALL EVENTS ARE SYNTHETIC. NO REAL SYSTEMS, TARGETS, CREDENTIALS, OR COMMANDS. DON'T DO CRIMES.
+  </p>
+
+  <main id="ctf-main" class="ctf-shell">
+    <section class="content-panel ctf-launch" id="ctf-launch" aria-labelledby="launch-title">
+      <p class="panel-kicker">ARCHIVE STATUS: READY</p>
+      <h2 id="launch-title">Select a Play Mode</h2>
+      <p>
+        Investigate a closed fictional environment through fixed narrative choices and pre-authored synthetic records.
+        This educational static-site exercise is source-visible and is not cheat-resistant.
+      </p>
+
+      <details class="ctf-howto">
+        <summary>How to play</summary>
+        <ol class="ctf-howto-steps">
+          <li>Pick a perspective below, then <strong>Start</strong>. Nothing installs, and you never type at a real system.</li>
+          <li>Read the current <strong>brief</strong> and <strong>objective</strong>, then <strong>Choose an Action</strong>. Locked actions show the prerequisite you still need.</li>
+          <li>Reason with the case tools: bookmark records in the <strong>Evidence Drawer</strong>, watch <strong>Asset Health</strong>, and filter the synthetic <strong>Event Timeline</strong> (new events reveal as you progress).</li>
+          <li>Stuck? Open a <strong>Learning Hint</strong>. Jot thoughts in <strong>Local Case Notes</strong> — they are inert text and are never run.</li>
+          <li>Reach an <strong>ending</strong>, then read the <strong>debrief</strong> and score. In Paired Mode you hand the same browser to the defender for a linked response.</li>
+        </ol>
+      </details>
+
+      <fieldset class="mode-picker">
+        <legend>Perspective</legend>
+        <label class="mode-card">
+          <input type="radio" name="ctf-mode" value="threat" checked />
+          <span><strong>Threat Simulation</strong>Reason about trust boundaries and defender-visible evidence after the edge compromise.</span>
+        </label>
+        <label class="mode-card">
+          <input type="radio" name="ctf-mode" value="defender" />
+          <span><strong>Incident Response</strong>Begin with one edge alert, correlate evidence, contain, recover, and hand off.</span>
+        </label>
+        <label class="mode-card">
+          <input type="radio" name="ctf-mode" value="paired" />
+          <span><strong>Paired Mode</strong>Complete Threat Simulation, then pass the same device to the defender for a linked response.</span>
+        </label>
+      </fieldset>
+
+      <div class="ctf-launch-actions">
+        <button class="button button-primary" id="ctf-start" type="button">Start New Simulation</button>
+        <button class="button" id="ctf-resume" type="button" hidden>Resume Saved Simulation</button>
+        <button class="button ctf-danger-button" id="ctf-reset-launch" type="button" hidden>Reset Saved Simulation</button>
+      </div>
+      <p class="ctf-storage-note" id="ctf-storage-note">Progress is stored only in this browser using a versioned local save.</p>
+    </section>
+
+    <div id="ctf-workspace" hidden>
+      <section class="ctf-commandbar" aria-label="Simulation controls">
+        <div>
+          <span class="ctf-status-key">MODE</span>
+          <strong id="ctf-mode-status">Not started</strong>
+        </div>
+        <div>
+          <span class="ctf-status-key">SAVE</span>
+          <span id="ctf-save-status">Not saved</span>
+        </div>
+        <div class="ctf-commandbar-actions">
+          <button class="button" id="ctf-save-now" type="button">Save Now</button>
+          <button class="button ctf-danger-button" id="ctf-reset" type="button">Reset</button>
+        </div>
+      </section>
+
+      <div class="ctf-dashboard">
+        <section class="content-panel ctf-narrative" aria-labelledby="node-title">
+          <p class="panel-kicker" id="chapter-label">SIMULATION BRIEF</p>
+          <h2 id="node-title" tabindex="-1">Loading narrative</h2>
+          <p class="ctf-objective-label">Narrative</p>
+          <p id="node-body"></p>
+          <div class="ctf-objective-box">
+            <h3>Current Objective</h3>
+            <p id="node-objective"></p>
+          </div>
+
+          <p class="ctf-paired-consequence" id="paired-consequence" hidden></p>
+
+          <div class="ctf-hint" id="ctf-hint" tabindex="-1" hidden>
+            <h3>Learning Hint</h3>
+            <p id="ctf-hint-text"></p>
+          </div>
+          <button class="button" id="ctf-show-hint" type="button">Show Learning Hint</button>
+
+          <div class="ctf-feedback" id="choice-feedback" role="status" tabindex="-1" hidden></div>
+
+          <section class="ctf-choice-region" aria-labelledby="choices-title">
+            <h3 id="choices-title">Choose an Action</h3>
+            <div id="ctf-choices" class="ctf-choice-list"></div>
+          </section>
+        </section>
+
+        <aside class="ctf-sidebar" aria-label="Case information">
+          <details class="content-panel ctf-drawer" open>
+            <summary>Evidence Drawer <span id="evidence-count">0 visible</span></summary>
+            <p class="ctf-drawer-help">Bookmark decision-relevant records and keep local notes. Notes are inert text and never interpreted.</p>
+            <div id="evidence-list" class="evidence-list"></div>
+          </details>
+
+          <section class="content-panel" aria-labelledby="asset-title">
+            <h2 id="asset-title">Asset Health</h2>
+            <p class="ctf-region-help">How each fictional asset is holding up — and whether it is contained — as the incident unfolds.</p>
+            <div id="asset-summary" class="asset-summary"></div>
+          </section>
+
+          <section class="content-panel" aria-labelledby="codes-title">
+            <h2 id="codes-title">Evidence Codes</h2>
+            <p id="codes-empty">Codes reward reasoning and completed transitions, never command entry.</p>
+            <ul id="code-list" class="code-list"></ul>
+          </section>
+        </aside>
+      </div>
+
+      <section class="content-panel ctf-timeline" aria-labelledby="timeline-title">
+        <div class="timeline-heading">
+          <div>
+            <p class="panel-kicker">SYNTHETIC EVENT CORPUS</p>
+            <h2 id="timeline-title">Filterable Event Timeline</h2>
+          </div>
+          <p id="timeline-count">0 events shown</p>
+        </div>
+
+        <p class="ctf-region-help">Every record here is fictional training data. Filter by source, host, severity, stage, or time; more events appear as the scenario progresses.</p>
+
+        <form id="timeline-filters" class="timeline-filters">
+          <label>Source
+            <select id="filter-source" name="source"><option value="">All sources</option></select>
+          </label>
+          <label>Host
+            <select id="filter-host" name="host"><option value="">All hosts</option></select>
+          </label>
+          <label>Severity
+            <select id="filter-severity" name="severity"><option value="">All severities</option></select>
+          </label>
+          <label>Stage
+            <select id="filter-stage" name="stage"><option value="">All revealed stages</option></select>
+          </label>
+          <label>From time
+            <input id="filter-from" name="from" type="datetime-local" step="30" />
+          </label>
+          <label>Through time
+            <input id="filter-to" name="to" type="datetime-local" step="30" />
+          </label>
+          <button class="button" id="clear-filters" type="button">Clear Filters</button>
+        </form>
+
+        <div id="timeline-events" class="timeline-events"></div>
+      </section>
+
+      <section class="content-panel ctf-notebook" aria-labelledby="notebook-title">
+        <h2 id="notebook-title">Local Case Notes</h2>
+        <label for="case-notes">Record a bounded hypothesis, uncertainty, or handoff note. Maximum 1,000 characters.</label>
+        <textarea id="case-notes" maxlength="1000" rows="5"></textarea>
+        <p><span id="case-note-count">0</span>/1000 characters. Stored only in the versioned local save.</p>
+      </section>
+    </div>
+
+    <section class="content-panel ctf-ending" id="ctf-ending" aria-labelledby="ending-title" hidden>
+      <p class="panel-kicker">SIMULATION DEBRIEF</p>
+      <h2 id="ending-title" tabindex="-1">Ending</h2>
+      <p id="ending-summary"></p>
+      <div class="score-grid" id="score-grid"></div>
+      <section aria-labelledby="debrief-title">
+        <h3 id="debrief-title">Debrief</h3>
+        <ul id="debrief-list"></ul>
+      </section>
+      <div class="ctf-launch-actions">
+        <button class="button button-primary" id="paired-continue" type="button" hidden>Pass to Incident Responder</button>
+        <button class="button" id="ending-review" type="button">Review Case Workspace</button>
+        <button class="button ctf-danger-button" id="ending-reset" type="button">Reset and Replay</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
+    <h2 id="reset-title">Reset Simulation?</h2>
+    <p id="reset-description">This removes the local CTF save, bookmarks, and notes from this browser. The bundled synthetic data is unchanged.</p>
+    <div class="ctf-launch-actions">
+      <button class="button ctf-danger-button" id="confirm-reset" type="button">Reset Local Save</button>
+      <button class="button" id="cancel-reset" type="button">Cancel</button>
+    </div>
+  </dialog>
+
+  <p class="sr-only" id="ctf-live" aria-live="polite" aria-atomic="true"></p>
+
+  <noscript>
+    <div class="noscript-note">
+      This deterministic simulation requires JavaScript to apply its allowlisted state transitions. No external service is contacted.
+    </div>
+  </noscript>
+
+  <script type="module" src="js/ctf/app.js"></script>
+</body>
+</html>

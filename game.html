@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Content Security Policy: only same-origin CSS/JS, and block every network
+       connection. The game runs fully offline in the browser. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" />
   <meta name="description" content="Play PESTICIDE-DMZ, a retro canvas raycaster built with vanilla JavaScript for the MANGO.SYS cybersecurity portfolio." />
   <meta name="theme-color" content="#1a0f00" />
   <meta property="og:type" content="website" />

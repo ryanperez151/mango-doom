@@ -21,11 +21,14 @@ for quick visual checks.
 - `resume.html` — complete résumé and contact information
 - `projects/mango-sys.html` — verified MANGO.SYS project case study
 - `game.html` — playable PESTICIDE-DMZ raycaster
+- `ctf.html` — deterministic, offline Mango Keep security tabletop
 - `css/style.css` — shared tokens, typography, controls, and accessibility styles
+- `css/ctf.css` — responsive CTF workspace, evidence, timeline, and debrief styles
 - `css/home.css`, `css/resume.css`, `css/game.css` — page-specific layouts
 - `js/boot.js` — optional boot animation and `mangoSys.bootSeen` session flag
 - `js/menu.js` — progressive hash navigation and focus management
 - `js/raycaster.js`, `js/game.js` — rendering engine and game state
+- `js/ctf/` — validated CTF engine, local-save contract, and page controller
 
 ## Content rules
 
@@ -46,6 +49,36 @@ A résumé PDF should only be linked after a current, verified file is added.
 - Canvas-only information needs an HTML label or status equivalent.
 
 ## Validation checklist
+
+Run the CTF's dependency-free static validators with:
+
+```powershell
+.\tests\validate-ctf.ps1
+```
+
+With Node.js 20 or newer, run the deterministic engine and route audits with:
+
+```powershell
+node .\tests\run-ctf-engine.mjs
+node .\tests\run-ctf-playthroughs.mjs
+```
+
+Serve the repository and open `tests/ctf-engine.html` to run the same engine
+suite in a browser. On Windows with Chrome installed in its standard location,
+`node .\tests\run-site-browser-smoke.mjs` performs a loopback-only 320 CSS-pixel,
+keyboard, save/resume, portfolio, and raycaster smoke check. It creates and
+removes an isolated temporary browser profile.
+
+CTF documentation:
+
+- [Product specification](docs/ctf-spec.md) and [safety boundary](docs/ctf-safety.md)
+- [Learner guide](docs/ctf-learner-guide.md)
+- [Facilitator guide and blank answer-key template](docs/ctf-facilitator-guide.md)
+- [Content authoring guide](docs/ctf-authoring-guide.md)
+- [Latest release audit](docs/ctf-release-audit.md)
+
+Do not place a completed facilitator answer key in the deployed repository.
+Keep completed answers in an access-controlled location outside the public site.
 
 Before deployment:
 

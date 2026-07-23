@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Content Security Policy: only same-origin CSS/JS, and block every network
+       connection. This site talks to no backend or analytics service. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" />
   <meta name="description" content="Ryan Perez is a North Carolina cybersecurity analyst specializing in incident response, network forensics, threat investigation, and security operations." />
   <meta name="theme-color" content="#1a0f00" />
   <meta property="og:type" content="website" />
@@ -54,6 +57,7 @@
         <a class="button button-primary" href="resume.html">View Résumé</a>
         <a class="button" href="#projects">View Projects</a>
         <a class="button" href="game.html">Play Game</a>
+        <a class="button" href="ctf.html">Play CTF</a>
         <a class="button" href="#contact">Contact</a>
       </div>
     </header>
@@ -64,6 +68,7 @@
         <li><a class="menu-option" href="#profile"><span aria-hidden="true">🥭</span> Character Sheet — Résumé</a></li>
         <li><a class="menu-option" href="#projects"><span aria-hidden="true">🥭</span> Missions — Security Projects</a></li>
         <li><a class="menu-option" href="#game"><span aria-hidden="true">🥭</span> New Game — Playable Demo</a></li>
+        <li><a class="menu-option" href="#ctf"><span aria-hidden="true">🥭</span> Incident Tabletop — CTF</a></li>
         <li><a class="menu-option" href="#contact"><span aria-hidden="true">🥭</span> Summon — Contact</a></li>
         <li><a class="menu-option" href="#credits"><span aria-hidden="true">🥭</span> Credits — About This Site</a></li>
       </ul>
@@ -129,10 +134,21 @@
       <section class="content-panel" id="game" tabindex="-1">
         <p class="panel-kicker">DATABASE: PESTICIDE-DMZ</p>
         <h2>New Game — Playable Demo</h2>
-        <p>Eth2/PESTICIDE-DMZ is crawling with rotten packets. Navigate the perimeter, manage firewall charge, and purge six threats from the orchard.</p>
+        <p>Eth2/PESTICIDE-DMZ is crawling with rotten packets. Navigate the perimeter, manage firewall charge, and purge twelve threats from the orchard.</p>
         <p>The current mission is designed for a keyboard and mouse. Touch-only visitors receive a clear platform notice before launch.</p>
         <div class="panel-actions">
           <a class="button button-primary" href="game.html">Start Mission</a>
+          <a class="button back-to-menu" href="#top">Back to Top</a>
+        </div>
+      </section>
+
+      <section class="content-panel" id="ctf" tabindex="-1">
+        <p class="panel-kicker">DATABASE: INCIDENT ARCHIVE</p>
+        <h2>Incident Tabletop — CTF</h2>
+        <p>A fictional, inert incident-response tabletop. Investigate a closed synthetic environment through fixed narrative choices and pre-authored telemetry — no real systems, targets, credentials, or commands. Every record is synthetic.</p>
+        <p>Play as the threat, the defender, or both in Paired Mode. It runs entirely offline, and your progress is saved only in your own browser.</p>
+        <div class="panel-actions">
+          <a class="button button-primary" href="ctf.html">Launch CTF</a>
           <a class="button back-to-menu" href="#top">Back to Top</a>
         </div>
       </section>

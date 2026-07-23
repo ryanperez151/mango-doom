@@ -36,6 +36,13 @@
   gap: 0.7rem;
 }
 
+.resume-pdf-note {
+  max-width: 46rem;
+  margin: -1rem 0 2rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .char-section {
   margin-block: 2rem;
   scroll-margin-top: 1rem;
@@ -112,5 +119,86 @@
 
   .stat-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/*
+ * Print / "Save as PDF": the dark retro theme wastes ink and prints with poor
+ * contrast on paper, so for print we drop to plain black-on-white, remove the
+ * glow/scanline effects, and hide on-screen-only chrome (nav, buttons, notes).
+ */
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  /* Remove the fixed scanline overlay. */
+  body::before {
+    display: none;
+  }
+
+  /* Hide chrome that only makes sense on screen. */
+  .skip-link,
+  .page-nav,
+  .resume-actions,
+  .resume-pdf-note,
+  .back-to-menu {
+    display: none !important;
+  }
+
+  .page-scroll {
+    padding-block: 0;
+  }
+
+  .page-content {
+    width: 100%;
+    max-width: none;
+  }
+
+  .content-panel {
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  .char-name {
+    color: #000;
+    text-shadow: none;
+  }
+
+  .panel-kicker,
+  .eyebrow,
+  .char-meta dt {
+    color: #333;
+  }
+
+  .resume-summary,
+  .char-subtitle {
+    color: #222;
+  }
+
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  .char-quote {
+    border-left-color: #999;
+  }
+
+  .plain-list li::before {
+    color: #000;
+  }
+
+  /* Keep logical blocks from splitting across page breaks. */
+  .char-section,
+  .char-card,
+  .stat-grid {
+    break-inside: avoid;
   }
 }

@@ -5,7 +5,7 @@
 (function () {
   "use strict";
 
-  const panelIds = ["profile", "projects", "game", "contact", "credits"];
+  const panelIds = ["profile", "projects", "game", "ctf", "contact", "credits"];
   const panels = Array.from(document.querySelectorAll(".content-panel"));
   const menuLinks = Array.from(document.querySelectorAll(".menu-option"));
   const replayButton = document.getElementById("replay-boot");

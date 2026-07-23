@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Content Security Policy: only same-origin CSS/JS, and block every network
+       connection. This is a static page with no backend or analytics. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" />
   <meta name="description" content="Résumé for Ryan Perez, a North Carolina cybersecurity analyst experienced in incident response, network forensics, SIEM, SOAR, XDR, and security operations." />
   <meta name="theme-color" content="#1a0f00" />
   <meta property="og:type" content="profile" />
@@ -18,10 +21,13 @@
   <a class="skip-link" href="#resume-content">Skip to résumé</a>
 
   <main class="page-content" id="resume-content">
-    <nav class="page-nav" aria-label="Résumé navigation">
+    <nav class="page-nav" aria-label="Site sections">
       <a href="index.html">MANGO.SYS Home</a>
+      <a href="resume.html">Résumé</a>
       <a href="index.html#projects">Projects</a>
-      <a href="#contact-details">Contact</a>
+      <a href="game.html">Game</a>
+      <a href="ctf.html">CTF</a>
+      <a href="index.html#contact">Contact</a>
     </nav>
     <section class="content-panel active">
       <p class="panel-kicker">DATABASE: PERSONNEL // FULL RECORD</p>
@@ -31,7 +37,9 @@
         <a class="button button-primary" href="mailto:ryan@mangosec.xyz">Email Ryan</a>
         <a class="button" href="https://www.linkedin.com/in/ryanperez-in/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a class="button" href="https://github.com/ryanperez151" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <button class="button" id="resume-print" type="button" hidden>Save as PDF</button>
       </div>
+      <p class="resume-pdf-note">Prefer a file? Use your browser's Print dialog and choose "Save as PDF" — this page is formatted for clean, ink-friendly printing. A verified downloadable PDF will be linked here once one is prepared.</p>
 
       <div class="char-card">
         <div class="char-name">MANGOBYTE</div>
@@ -162,5 +170,18 @@
     </section>
   </main>
 
+  <script>
+    // Progressive enhancement: reveal a "Save as PDF" shortcut only when JavaScript
+    // can open the browser's print dialog. Without JS the Print menu still works,
+    // and the button stays hidden so nobody sees a dead control.
+    (function () {
+      var printButton = document.getElementById("resume-print");
+      if (!printButton) return;
+      printButton.hidden = false;
+      printButton.addEventListener("click", function () {
+        window.print();
+      });
+    })();
+  </script>
 </body>
 </html>

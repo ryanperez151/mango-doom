@@ -1,0 +1,203 @@
+{
+  "metadata": {
+    "manifest_id": "mango_keep_evidence_manifest_v1",
+    "schema_version": 1,
+    "scenario_id": "mango_keep_complete",
+    "telemetry_pack_id": "mango_keep_telemetry_v1",
+    "synthetic": true,
+    "artifact_count": 10,
+    "purpose": "Maps fictional evidence artifacts to primary, corroborating, and benign distractor event IDs."
+  },
+  "artifacts": [
+    {
+      "artifact_id": "artifact_edge_visibility",
+      "finding_id": "finding_edge_visibility",
+      "title": "Edge premise and visibility gap",
+      "description": "Separates the fixed affected-edge premise from incomplete appliance visibility.",
+      "primary_event_ids": [
+        "tel_0001"
+      ],
+      "corroborating_event_ids": [
+        "tel_0004"
+      ],
+      "distractor_event_ids": [
+        "tel_0014"
+      ],
+      "node_refs": [
+        "p1_edge_context"
+      ],
+      "learning_note_id": "note_edge_premise"
+    },
+    {
+      "artifact_id": "artifact_trust_path",
+      "finding_id": "finding_trust_path",
+      "title": "Management trust path",
+      "description": "Correlates network reachability with fictional identity authority while preserving uncertainty.",
+      "primary_event_ids": [
+        "tel_0028"
+      ],
+      "corroborating_event_ids": [
+        "tel_0027"
+      ],
+      "distractor_event_ids": [
+        "tel_0025"
+      ],
+      "node_refs": [
+        "p2_trust_path"
+      ],
+      "learning_note_id": "note_typed_trust"
+    },
+    {
+      "artifact_id": "artifact_esxi_transition",
+      "finding_id": "finding_esxi_transition",
+      "title": "Symbolic hypervisor management transition",
+      "description": "Shows a bounded management-plane outcome and a separate management task signal.",
+      "primary_event_ids": [
+        "tel_0041"
+      ],
+      "corroborating_event_ids": [
+        "tel_0043"
+      ],
+      "distractor_event_ids": [
+        "tel_0048"
+      ],
+      "node_refs": [
+        "p3_transition"
+      ],
+      "learning_note_id": "note_management_evidence"
+    },
+    {
+      "artifact_id": "artifact_host_state",
+      "finding_id": "finding_host_state",
+      "title": "Unexpected host-management state",
+      "description": "Pairs a conceptual host-management observation with VM lifecycle context.",
+      "primary_event_ids": [
+        "tel_0042"
+      ],
+      "corroborating_event_ids": [
+        "tel_0044"
+      ],
+      "distractor_event_ids": [
+        "tel_0038"
+      ],
+      "node_refs": [
+        "p3_transition_recovery"
+      ],
+      "learning_note_id": "note_management_evidence"
+    },
+    {
+      "artifact_id": "artifact_inventory_roles",
+      "finding_id": "finding_inventory_roles",
+      "title": "Domain controller and decoy classification",
+      "description": "Correlates management inventory with VM lifecycle while retaining a plausible decoy distraction.",
+      "primary_event_ids": [
+        "tel_0067"
+      ],
+      "corroborating_event_ids": [
+        "tel_0068"
+      ],
+      "distractor_event_ids": [
+        "tel_0070"
+      ],
+      "node_refs": [
+        "p4_compare_roles"
+      ],
+      "learning_note_id": "note_inventory_roles"
+    },
+    {
+      "artifact_id": "artifact_persistence_marker",
+      "finding_id": "finding_persistence_marker",
+      "title": "Abstract persistence marker",
+      "description": "Correlates a harmless host-state marker with the absence of an approved fictional change.",
+      "primary_event_ids": [
+        "tel_0090"
+      ],
+      "corroborating_event_ids": [
+        "tel_0096"
+      ],
+      "distractor_event_ids": [
+        "tel_0091"
+      ],
+      "node_refs": [
+        "p5_marker_review"
+      ],
+      "learning_note_id": "note_abstract_persistence"
+    },
+    {
+      "artifact_id": "artifact_dc_marker",
+      "finding_id": "finding_dc_marker",
+      "title": "Reversible DC impact marker",
+      "description": "Pairs a synthetic domain security state with an identity signal and a benign analytic distraction.",
+      "primary_event_ids": [
+        "tel_0105"
+      ],
+      "corroborating_event_ids": [
+        "tel_0111"
+      ],
+      "distractor_event_ids": [
+        "tel_0106"
+      ],
+      "node_refs": [
+        "p6_dc_marker"
+      ],
+      "learning_note_id": "note_reversible_impact"
+    },
+    {
+      "artifact_id": "artifact_dns_pattern",
+      "finding_id": "finding_dns_pattern",
+      "title": "Management-zone name-resolution pattern",
+      "description": "Correlates a fictional DNS pattern with a management flow without implying a real destination.",
+      "primary_event_ids": [
+        "tel_0107"
+      ],
+      "corroborating_event_ids": [
+        "tel_0112"
+      ],
+      "distractor_event_ids": [
+        "tel_0119"
+      ],
+      "node_refs": [
+        "p6_checkpoint"
+      ],
+      "learning_note_id": "note_reversible_impact"
+    },
+    {
+      "artifact_id": "artifact_containment",
+      "finding_id": "finding_containment",
+      "title": "Containment boundary change",
+      "description": "Correlates a synthetic policy-state change with flow evidence and a benign identity distraction.",
+      "primary_event_ids": [
+        "tel_0122"
+      ],
+      "corroborating_event_ids": [
+        "tel_0124"
+      ],
+      "distractor_event_ids": [
+        "tel_0123"
+      ],
+      "node_refs": [
+        "p7_containment"
+      ],
+      "learning_note_id": "note_containment_scope"
+    },
+    {
+      "artifact_id": "artifact_recovery",
+      "finding_id": "finding_recovery",
+      "title": "Recovery and debrief record",
+      "description": "Pairs the fictional recovery record with VM lifecycle evidence and a plausible benign analytic.",
+      "primary_event_ids": [
+        "tel_0144"
+      ],
+      "corroborating_event_ids": [
+        "tel_0140"
+      ],
+      "distractor_event_ids": [
+        "tel_0142"
+      ],
+      "node_refs": [
+        "p7_checkpoint"
+      ],
+      "learning_note_id": "note_containment_scope"
+    }
+  ]
+}

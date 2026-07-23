@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Content Security Policy: only same-origin CSS/JS, and block every network
+       connection. This is a static page with no backend or analytics. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" />
   <meta name="description" content="Case study for MANGO.SYS, Ryan Perez's accessible cybersecurity portfolio and vanilla JavaScript raycaster." />
   <meta name="theme-color" content="#1a0f00" />
   <meta property="og:type" content="article" />
@@ -17,10 +20,13 @@
 <body class="page-scroll">
   <a class="skip-link" href="#case-study">Skip to case study</a>
   <main class="page-content" id="case-study">
-    <nav class="page-nav" aria-label="Project navigation">
+    <nav class="page-nav" aria-label="Site sections">
       <a href="../index.html">MANGO.SYS Home</a>
-      <a href="../index.html#projects">All Projects</a>
-      <a href="../game.html">Launch Demo</a>
+      <a href="../resume.html">Résumé</a>
+      <a href="../index.html#projects">Projects</a>
+      <a href="../game.html">Game</a>
+      <a href="../ctf.html">CTF</a>
+      <a href="../index.html#contact">Contact</a>
     </nav>
 
     <article class="content-panel active">
