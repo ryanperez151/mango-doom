@@ -1,7 +1,8 @@
-// Attacker "operator console" surface renderer. Presentation only: every action
-// still routes back through the allowlisted handlers passed in `ctx`. There is
-// no input field and no command execution — the prompt glyph and cursor are
-// decoration, and choices are a fixed, selectable menu.
+// Attacker "operator console" surface renderer. Presentation only: interaction
+// is delegated through data-* attributes handled by listeners in app.js —
+// nothing here mutates state directly. There is no input field and no command
+// execution — the prompt glyph and cursor are decoration, and choices are a
+// fixed, selectable menu.
 
 function buildChrome(textElement) {
   const chrome = document.createElement("div");
@@ -64,7 +65,7 @@ export function renderConsole(ctx) {
   revealedEvents.forEach((event) => {
     const line = document.createElement("p");
     line.className = "ctf-blue-team-row";
-    line.append(textElement("span", "synthetic-tag", "SYNTHETIC"));
+    line.append(textElement("span", "synthetic-tag", "SYNTHETIC — FICTIONAL TRAINING DATA"));
     line.append(document.createTextNode(` ${event.timestamp} · ${event.hostname} · ${event.action} · ${event.severity}`));
     dom.blueTeamEvents.append(line);
   });

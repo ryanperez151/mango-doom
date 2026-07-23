@@ -433,6 +433,7 @@ function applySkin() {
 }
 
 function buildViewContext(node, chapter, scenario, evidence, engineState) {
+  const events = filteredEvents();
   return {
     dom: ctfDom,
     textElement,
@@ -443,17 +444,10 @@ function buildViewContext(node, chapter, scenario, evidence, engineState) {
     engineState,
     choices: resolveChoices(node, scenario, engineState, evidence),
     revealedEvents: revealedEvents(),
-    events: filteredEvents(),
-    fieldCounts: computeFieldCounts(filteredEvents()),
+    events,
+    fieldCounts: computeFieldCounts(events),
     filters: ctfUiState.filters,
     eventBookmarks: ctfUiState.eventBookmarks,
-    handlers: {
-      onChoose: applySelectedChoice,
-      onSetFilter: setFilterValue,
-      onClearFilter: clearFilterValue,
-      onClearAll: clearAllFilters,
-      onBookmarkEvent: toggleEventBookmark,
-    },
   };
 }
 
@@ -527,7 +521,10 @@ function toggleEventBookmark(eventId) {
   const isBookmarked = ctfUiState.eventBookmarks.includes(eventId);
   persist();
   renderWorkspace();
-  ctfDom.timelineEvents.querySelector(`[data-event-id="${eventId}"]`)?.focus();
+  const bookmarkButton = ctfDom.timelineEvents.querySelector(`[data-event-id="${eventId}"]`);
+  const resultRow = bookmarkButton?.closest("details.ctf-result");
+  if (resultRow) resultRow.open = true;
+  bookmarkButton?.focus();
   announce(isBookmarked ? "Timeline event bookmarked." : "Timeline bookmark removed.");
 }
 

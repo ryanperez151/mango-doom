@@ -1,6 +1,7 @@
 // Defender "mock SIEM" surface renderer. Structured controls only — no free-text
-// search. Field-value clicks and pill removals route through the allowlisted
-// filter handlers in `ctx`; nothing here executes, navigates, or fetches.
+// search. Field-value clicks and pill removals are delegated through data-*
+// attributes handled by listeners in app.js; nothing here executes, navigates,
+// fetches, or mutates state directly.
 
 const FIELD_LABELS = [
   ["source", "Source"],
