@@ -142,8 +142,7 @@
   .skip-link,
   .page-nav,
   .resume-actions,
-  .resume-pdf-note,
-  .back-to-menu {
+  .resume-pdf-note {
     display: none !important;
   }
 

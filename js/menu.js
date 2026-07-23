@@ -40,6 +40,10 @@
     let winner = null;
     pairs.forEach(function (pair) {
       if (!visibleSections.has(pair.section)) return;
+      // Comparing offsetTop is valid only because every observed section
+      // shares the same offsetParent (no ancestor here is positioned). If a
+      // wrapper like .content-view ever gets `position: relative`, switch to
+      // getBoundingClientRect().top instead.
       if (!winner || pair.section.offsetTop < winner.section.offsetTop) {
         winner = pair;
       }
