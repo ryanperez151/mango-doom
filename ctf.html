@@ -41,7 +41,7 @@
       <p class="panel-kicker">ARCHIVE STATUS: READY</p>
       <h2 id="launch-title">Select a Play Mode</h2>
       <p>
-        Investigate a closed fictional environment through fixed narrative choices and pre-authored synthetic records.
+        Work the incident through focused choices and pre-authored records.
         This educational static-site exercise is source-visible and is not cheat-resistant.
       </p>
 
@@ -50,8 +50,8 @@
         <ol class="ctf-howto-steps">
           <li>Pick a perspective below, then <strong>Start</strong>. Nothing installs, and you never type at a real system.</li>
           <li>Read the current <strong>brief</strong> and <strong>objective</strong>, then <strong>Choose an Action</strong>. Locked actions show the prerequisite you still need.</li>
-          <li>Reason with the case tools: bookmark records in the <strong>Evidence Drawer</strong>, watch <strong>Asset Health</strong>, and filter the synthetic <strong>Event Timeline</strong> (new events reveal as you progress).</li>
-          <li>Stuck? Open a <strong>Learning Hint</strong>. Jot thoughts in <strong>Local Case Notes</strong> — they are inert text and are never run.</li>
+          <li>Reason with the case tools: bookmark records in the <strong>Evidence Drawer</strong>, watch <strong>Asset Health</strong>, and filter the <strong>Event Timeline</strong> as new events reveal.</li>
+          <li>Stuck? Open a <strong>Learning Hint</strong>. Jot thoughts in <strong>Local Case Notes</strong> as you investigate.</li>
           <li>Reach an <strong>ending</strong>, then read the <strong>debrief</strong> and score. In Paired Mode you hand the same browser to the defender for a linked response.</li>
         </ol>
       </details>
@@ -126,13 +126,13 @@
         <aside class="ctf-sidebar" aria-label="Case information">
           <details class="content-panel ctf-drawer" open>
             <summary>Evidence Drawer <span id="evidence-count">0 visible</span></summary>
-            <p class="ctf-drawer-help">Bookmark decision-relevant records and keep local notes. Notes are inert text and never interpreted.</p>
+            <p class="ctf-drawer-help">Bookmark decision-relevant records and keep local notes.</p>
             <div id="evidence-list" class="evidence-list"></div>
           </details>
 
           <section class="content-panel" aria-labelledby="asset-title">
             <h2 id="asset-title">Asset Health</h2>
-            <p class="ctf-region-help">How each fictional asset is holding up — and whether it is contained — as the incident unfolds.</p>
+            <p class="ctf-region-help">How each asset is holding up — and whether it is contained — as the incident unfolds.</p>
             <div id="asset-summary" class="asset-summary"></div>
           </section>
 
@@ -153,7 +153,7 @@
           <p id="timeline-count">0 events shown</p>
         </div>
 
-        <p class="ctf-region-help">Every record here is fictional training data. Filter by source, host, severity, stage, or time; more events appear as the scenario progresses.</p>
+        <p class="ctf-region-help">Filter by source, host, severity, stage, or time; more events appear as the scenario progresses.</p>
 
         <form id="timeline-filters" class="timeline-filters">
           <label>Source
@@ -207,7 +207,7 @@
 
   <dialog id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
     <h2 id="reset-title">Reset Simulation?</h2>
-    <p id="reset-description">This removes the local CTF save, bookmarks, and notes from this browser. The bundled synthetic data is unchanged.</p>
+    <p id="reset-description">This removes the local CTF save, bookmarks, and notes from this browser. Bundled records are unchanged.</p>
     <div class="ctf-launch-actions">
       <button class="button ctf-danger-button" id="confirm-reset" type="button">Reset Local Save</button>
       <button class="button" id="cancel-reset" type="button">Cancel</button>
@@ -218,7 +218,7 @@
 
   <noscript>
     <div class="noscript-note">
-      This deterministic simulation requires JavaScript to apply its allowlisted state transitions. No external service is contacted.
+      JavaScript is required to apply your choices and update the incident state.
     </div>
   </noscript>
 

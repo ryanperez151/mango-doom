@@ -273,7 +273,6 @@ function renderEvidence(scenario, evidence, engineState) {
   records.forEach((record) => {
     const card = document.createElement("article");
     card.className = "evidence-card";
-    card.append(textElement("p", "synthetic-tag", "SYNTHETIC — FICTIONAL TRAINING DATA"));
     card.append(textElement("h3", "", record.summary));
     card.append(textElement("p", "evidence-meta", `${record.timestamp} · ${record.sourceType} · ${record.kind}`));
     const bookmarked = ctfUiState.evidenceBookmarks.includes(record.id);
@@ -347,7 +346,7 @@ function renderTimeline() {
   ctfDom.timelineCount.textContent = `${events.length} ${events.length === 1 ? "event" : "events"} shown`;
   ctfDom.timelineEvents.replaceChildren();
   if (events.length === 0) {
-    ctfDom.timelineEvents.append(textElement("p", "ctf-empty", "No revealed synthetic events match these filters."));
+    ctfDom.timelineEvents.append(textElement("p", "ctf-empty", "No revealed events match these filters."));
     return;
   }
 
@@ -359,7 +358,6 @@ function renderTimeline() {
     heading.append(textElement("h3", "", `${event.event_id} · ${event.action}`));
     heading.append(textElement("span", `severity severity-${event.severity}`, `Severity: ${event.severity}`));
     card.append(heading);
-    card.append(textElement("p", "synthetic-tag", "SYNTHETIC — FICTIONAL TRAINING DATA"));
     card.append(textElement("p", "", event.message));
     const details = document.createElement("dl");
     [["Time", event.timestamp], ["Source", event.dataset], ["Host", event.hostname], ["Stage", event.scenario_stage], ["Outcome", event.outcome]].forEach(([term, value]) => {
@@ -515,7 +513,7 @@ function continuePairedMode() {
   persist("Paired handoff saved");
   renderWorkspace();
   ctfDom.nodeTitle.focus();
-  announce("Paired handoff complete. Incident Response begins with the initial synthetic edge alert.");
+  announce("Paired handoff complete. Incident Response begins with the initial edge alert.");
 }
 
 function openResetDialog(trigger) {
