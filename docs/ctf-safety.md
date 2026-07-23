@@ -6,7 +6,7 @@ Status: normative for all design, content, code, tests, and reviews related to T
 
 > This is a closed, fictional, data-only cybersecurity simulation. It never connects to, scans, authenticates to, or modifies a real device, VM, directory, network, or cloud service. The edge NGFW begins already compromised; its exploitation is never explained or implemented. Threat actions are symbolic scenario choices resolved only through allowlisted state transitions. Persistence and domain-controller impact are harmless abstract markers. All telemetry is visibly synthetic. The application is deterministic, offline-friendly, and contains no actual shell, arbitrary command execution, target entry, external network calls, `eval`, executable scenario content, usable secrets, or reusable compromise steps.
 
-This guardrail must appear in contributor-facing CTF documentation. A concise player-facing version must appear before a run begins and remain reachable from every chapter.
+This guardrail must appear in contributor-facing CTF documentation. A concise player-facing version must appear before a run begins and remain reachable from every chapter. The persistent header provides that disclosure for the tabletop as a whole. Do not repeat implementation-safety details or provenance labels in ordinary learner copy.
 
 ## 1. Safety invariants
 
@@ -19,7 +19,7 @@ These requirements are release blockers:
 5. **No reusable compromise guidance.** Content contains no real exploit code, working payload, credential collection, usable secret, persistence procedure, evasion or anti-forensics instruction, vendor attack command, or ordered compromise recipe.
 6. **Symbolic actions only.** Players select fixed IDs. Reducers apply field-specific allowlisted changes. Unknown actions, IDs, fields, and values fail closed.
 7. **Abstract sensitive effects.** Persistence is only `persistence_marker_present: true|false`. DC impact is only `dc_snapshot_exposure_marker: none|suspected|abstract_exposure_confirmed`. These markers have no mapping to a real mechanism.
-8. **Synthetic evidence.** Every telemetry record has `synthetic: true` and visibly displays `[SYNTHETIC — FICTIONAL TRAINING DATA]`. A record without both is invalid.
+8. **Synthetic evidence.** Every telemetry record has `synthetic: true`; the persistent player-facing disclosure identifies the tabletop’s records as synthetic. A record without the structured marker is invalid.
 9. **No stealth incentive.** Scoring never rewards stealth, dwell time, evasion, deletion, reduced logging, persistence duration, destructive impact, credential access, or reaching a deeper target.
 10. **Proportionate learning goals.** Threat scoring rewards trust-boundary reasoning, evidence awareness, minimizing unnecessary impact, and documentation. Defender scoring rewards correlation, scope, preservation, containment, recovery, and communication.
 11. **Local and deterministic.** Identical initial state and choices produce identical state, evidence, scores, and endings. No wall clock, randomness, device fingerprint, network response, or external state changes gameplay.
@@ -98,7 +98,7 @@ When an educational point seems to require prohibited detail, replace it with an
 
 Review every player-visible and data string before release. For each item, answer:
 
-1. Is it visibly fictional and, if telemetry, visibly synthetic?
+1. Does the run retain the persistent disclosure and, if this is telemetry, its `synthetic: true` provenance marker?
 2. Does it use only approved names and documentation addresses?
 3. Does it state an observation, choice, or consequence without teaching a mechanism?
 4. Could a reader transfer it into a real command, request, payload, credential workflow, persistence method, evasion method, or vendor attack sequence? If yes, reject it.

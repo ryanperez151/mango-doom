@@ -265,7 +265,6 @@ function renderEvidence(scenario, evidence, engineState) {
   records.forEach((record) => {
     const card = document.createElement("article");
     card.className = "evidence-card";
-    card.append(textElement("p", "synthetic-tag", "SYNTHETIC — FICTIONAL TRAINING DATA"));
     card.append(textElement("h3", "", record.summary));
     card.append(textElement("p", "evidence-meta", `${record.timestamp} · ${record.sourceType} · ${record.kind}`));
     const bookmarked = ctfUiState.evidenceBookmarks.includes(record.id);
@@ -327,9 +326,44 @@ function renderCodes() {
   });
 }
 
-function renderTimelineFilterState() {
-  ctfDom.filterFrom.value = ctfUiState.filters.from;
-  ctfDom.filterTo.value = ctfUiState.filters.to;
+function renderTimeline() {
+  const stages = revealedStages();
+  setSelectOptions(ctfDom.filterStage, stages, "All revealed stages");
+  Object.entries(ctfUiState.filters).forEach(([key, value]) => {
+    const control = ctfDom.filterForm.elements.namedItem(key);
+    if (control) control.value = value;
+  });
+
+  const events = filteredEvents();
+  ctfDom.timelineCount.textContent = `${events.length} ${events.length === 1 ? "event" : "events"} shown`;
+  ctfDom.timelineEvents.replaceChildren();
+  if (events.length === 0) {
+    ctfDom.timelineEvents.append(textElement("p", "ctf-empty", "No revealed events match these filters."));
+    return;
+  }
+
+  events.forEach((event) => {
+    const card = document.createElement("article");
+    card.className = "timeline-event";
+    const heading = document.createElement("div");
+    heading.className = "timeline-event-heading";
+    heading.append(textElement("h3", "", `${event.event_id} · ${event.action}`));
+    heading.append(textElement("span", `severity severity-${event.severity}`, `Severity: ${event.severity}`));
+    card.append(heading);
+    card.append(textElement("p", "", event.message));
+    const details = document.createElement("dl");
+    [["Time", event.timestamp], ["Source", event.dataset], ["Host", event.hostname], ["Stage", event.scenario_stage], ["Outcome", event.outcome]].forEach(([term, value]) => {
+      details.append(textElement("dt", "", term), textElement("dd", "", value));
+    });
+    card.append(details);
+    const bookmarked = ctfUiState.eventBookmarks.includes(event.event_id);
+    const button = textElement("button", "button event-bookmark", bookmarked ? "Remove Timeline Bookmark" : "Bookmark Timeline Event");
+    button.type = "button";
+    button.dataset.eventId = event.event_id;
+    button.setAttribute("aria-pressed", String(bookmarked));
+    card.append(button);
+    ctfDom.timelineEvents.append(card);
+  });
 }
 
 function scoreItemsFor(scenario, engineState) {
@@ -537,7 +571,7 @@ function continuePairedMode() {
   persist("Paired handoff saved");
   renderWorkspace();
   ctfDom.nodeTitle.focus();
-  announce("Paired handoff complete. Incident Response begins with the initial synthetic edge alert.");
+  announce("Paired handoff complete. Incident Response begins with the initial edge alert.");
 }
 
 function openResetDialog(trigger) {

@@ -8,7 +8,7 @@ Status: implemented as a deterministic static-site experience; this specificatio
 
 The Mango Keep Incident is a deterministic, offline, choose-your-own-adventure CTF for intermediate SOC analysts and security engineers. It borrows only high-level defensive themes from public BRICKSTORM reporting: an already-compromised perimeter appliance, management-plane trust, gaps in appliance telemetry, virtualization-layer evidence, sensitive hosted systems, and the need for careful recovery.
 
-The experience is a fictional learning simulation, not an exploitation lab. The edge NGFW is compromised before play begins. Players never exploit it, enter a target, run a command, collect a credential, deploy software, or contact a system. Every threat action is a symbolic choice resolved through an allowlisted state transition. All telemetry is pre-authored, inert, visibly marked `SYNTHETIC`, and uses only `.invalid` hostnames and documentation IP ranges.
+The experience is a fictional learning simulation, not an exploitation lab. The edge NGFW is compromised before play begins. Players never exploit it, enter a target, run a command, collect a credential, deploy software, or contact a system. Every threat action is a symbolic choice resolved through an allowlisted state transition. A persistent player-facing disclosure establishes the exercise context; telemetry keeps its structured `synthetic: true` provenance and uses only `.invalid` hostnames and documentation IP ranges.
 
 Because this is a static site, scenario data and answer logic are visible in source. The experience is educational and replayable, but it is not cheat-resistant and must never claim to certify skill or protect competitive scores.
 
@@ -180,10 +180,9 @@ Transitions are declared as data with an ID, required current chapter/state, eff
 
 ## 8. Evidence and telemetry model
 
-Every record must include a visible synthetic marker and structured provenance:
+Every record must include structured provenance; the persistent tabletop disclosure provides the visible synthetic context:
 
 - `synthetic: true` (required and immutable)
-- display prefix: `[SYNTHETIC — FICTIONAL TRAINING DATA]`
 - allowlisted `sourceType`: `ngfw`, `network`, `virtualization`, `identity`, `endpoint`, `change_control`, or `analyst_note`
 - fictional timestamp, event ID, asset IDs, summary, and classification tags
 - optional correlation IDs that are invented and have no operational meaning

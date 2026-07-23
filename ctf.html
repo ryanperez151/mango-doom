@@ -41,7 +41,7 @@
       <p class="panel-kicker">ARCHIVE STATUS: READY</p>
       <h2 id="launch-title">Select a Play Mode</h2>
       <p>
-        Investigate a closed fictional environment through fixed narrative choices and pre-authored synthetic records.
+        Work the incident through focused choices and pre-authored records.
         This educational static-site exercise is source-visible and is not cheat-resistant.
       </p>
 
@@ -50,8 +50,8 @@
         <ol class="ctf-howto-steps">
           <li>Pick a perspective below, then <strong>Start</strong>. Nothing installs, and you never type at a real system.</li>
           <li>Read the current <strong>brief</strong> and <strong>objective</strong>, then <strong>Choose an Action</strong>. Locked actions show the prerequisite you still need.</li>
-          <li>Reason with the case tools: bookmark records in the <strong>Evidence Drawer</strong>, watch <strong>Asset Health</strong>, and filter the synthetic <strong>Event Timeline</strong> (new events reveal as you progress).</li>
-          <li>Stuck? Open a <strong>Learning Hint</strong>. Jot thoughts in <strong>Local Case Notes</strong> — they are inert text and are never run.</li>
+          <li>Reason with the case tools: bookmark records in the <strong>Evidence Drawer</strong>, watch <strong>Asset Health</strong>, and filter the <strong>Event Timeline</strong> as new events reveal.</li>
+          <li>Stuck? Open a <strong>Learning Hint</strong>. Jot thoughts in <strong>Local Case Notes</strong> as you investigate.</li>
           <li>Reach an <strong>ending</strong>, then read the <strong>debrief</strong> and score. In Paired Mode you hand the same browser to the defender for a linked response.</li>
         </ol>
       </details>
@@ -143,12 +143,26 @@
         </section>
       </aside>
 
-      <!-- Console skin: compact, collapsed "what the blue team can see" readout. -->
-      <details id="ctf-blue-team" class="content-panel ctf-blue-team">
-        <summary>Blue-Team Visibility <span id="ctf-blue-team-count">0 events</span></summary>
-        <p class="ctf-region-help">A read-only glimpse of the synthetic evidence a defender could correlate. Every record is fictional training data.</p>
-        <div id="ctf-blue-team-events" class="timeline-events"></div>
-      </details>
+        <aside class="ctf-sidebar" aria-label="Case information">
+          <details class="content-panel ctf-drawer" open>
+            <summary>Evidence Drawer <span id="evidence-count">0 visible</span></summary>
+            <p class="ctf-drawer-help">Bookmark decision-relevant records and keep local notes.</p>
+            <div id="evidence-list" class="evidence-list"></div>
+          </details>
+
+          <section class="content-panel" aria-labelledby="asset-title">
+            <h2 id="asset-title">Asset Health</h2>
+            <p class="ctf-region-help">How each asset is holding up — and whether it is contained — as the incident unfolds.</p>
+            <div id="asset-summary" class="asset-summary"></div>
+          </section>
+
+          <section class="content-panel" aria-labelledby="codes-title">
+            <h2 id="codes-title">Evidence Codes</h2>
+            <p id="codes-empty">Codes reward reasoning and completed transitions, never command entry.</p>
+            <ul id="code-list" class="code-list"></ul>
+          </section>
+        </aside>
+      </div>
 
       <!-- SIEM skin: full structured event search. Hidden in the console skin via CSS. -->
       <section class="content-panel ctf-timeline" aria-labelledby="timeline-title">
@@ -160,26 +174,31 @@
           <p id="timeline-count">0 events shown</p>
         </div>
 
-        <p class="ctf-region-help">Every record here is fictional training data. Narrow by clicking field values or removing active filters; more events appear as the incident progresses.</p>
+        <p class="ctf-region-help">Filter by source, host, severity, stage, or time; more events appear as the scenario progresses.</p>
 
-        <div id="ctf-filter-pills" class="ctf-filter-pills" aria-label="Active filters"></div>
-        <div id="ctf-severity-bars" class="ctf-severity-bars" aria-hidden="true"></div>
+        <form id="timeline-filters" class="timeline-filters">
+          <label>Source
+            <select id="filter-source" name="source"><option value="">All sources</option></select>
+          </label>
+          <label>Host
+            <select id="filter-host" name="host"><option value="">All hosts</option></select>
+          </label>
+          <label>Severity
+            <select id="filter-severity" name="severity"><option value="">All severities</option></select>
+          </label>
+          <label>Stage
+            <select id="filter-stage" name="stage"><option value="">All revealed stages</option></select>
+          </label>
+          <label>From time
+            <input id="filter-from" name="from" type="datetime-local" step="30" />
+          </label>
+          <label>Through time
+            <input id="filter-to" name="to" type="datetime-local" step="30" />
+          </label>
+          <button class="button" id="clear-filters" type="button">Clear Filters</button>
+        </form>
 
-        <div class="ctf-siem-body">
-          <div id="ctf-fields" class="ctf-fields" aria-label="Fields"></div>
-          <div class="ctf-results">
-            <form id="timeline-filters" class="timeline-filters" aria-label="Time range">
-              <label>From time
-                <input id="filter-from" name="from" type="datetime-local" step="30" />
-              </label>
-              <label>Through time
-                <input id="filter-to" name="to" type="datetime-local" step="30" />
-              </label>
-              <button class="button" id="clear-filters" type="button">New Search</button>
-            </form>
-            <div id="timeline-events" class="timeline-events"></div>
-          </div>
-        </div>
+        <div id="timeline-events" class="timeline-events"></div>
       </section>
 
       <section class="content-panel ctf-notebook" aria-labelledby="notebook-title">
@@ -209,7 +228,7 @@
 
   <dialog id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
     <h2 id="reset-title">Reset Simulation?</h2>
-    <p id="reset-description">This removes the local CTF save, bookmarks, and notes from this browser. The bundled synthetic data is unchanged.</p>
+    <p id="reset-description">This removes the local CTF save, bookmarks, and notes from this browser. Bundled records are unchanged.</p>
     <div class="ctf-launch-actions">
       <button class="button ctf-danger-button" id="confirm-reset" type="button">Reset Local Save</button>
       <button class="button" id="cancel-reset" type="button">Cancel</button>
@@ -220,7 +239,7 @@
 
   <noscript>
     <div class="noscript-note">
-      This deterministic simulation requires JavaScript to apply its allowlisted state transitions. No external service is contacted.
+      JavaScript is required to apply your choices and update the incident state.
     </div>
   </noscript>
 
