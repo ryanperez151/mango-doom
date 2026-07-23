@@ -128,8 +128,9 @@ Preserve single-column layout and no horizontal scroll at 320px.
   no new persisted state.
 - The SIEM timeline is demoted to a compact, collapsible **"BLUE-TEAM
   VISIBILITY"** readout, reinforcing the attacker's evidence-awareness learning
-  goal. Evidence drawer, asset health, and evidence codes render as console
-  side readouts.
+  goal. It defaults **collapsed** on first render so the console stays focused
+  on the attacker's own actions. Evidence drawer, asset health, and evidence
+  codes render as console side readouts.
 
 ## 5. Defender SIEM surface (defender track)
 
@@ -208,7 +209,5 @@ Preserve single-column layout and no horizontal scroll at 320px.
 ## 11. Open items (deferred, adjustable later)
 
 - Exact visual density of the SIEM severity bar readout.
-- Whether the attacker's "blue-team visibility" readout defaults open or
-  collapsed on first render.
 
-These do not block planning and can be tuned during implementation.
+This does not block planning and can be tuned during implementation.
