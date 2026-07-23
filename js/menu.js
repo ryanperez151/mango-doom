@@ -1,80 +1,74 @@
 // menu.js
-// Enhances ordinary hash links into focused, history-aware content panels.
-// Without JavaScript every section remains visible in normal document flow.
+// Sticky section-nav scroll-spy for the hub. Highlights the nav link for the
+// section currently in view. This is pure enhancement: with JavaScript off the
+// nav is plain in-page anchor links and every section is visible in normal
+// document flow, so navigation still works.
 
 (function () {
   "use strict";
 
-  const panelIds = ["profile", "projects", "game", "ctf", "contact", "credits"];
-  const panels = Array.from(document.querySelectorAll(".content-panel"));
-  const menuLinks = Array.from(document.querySelectorAll(".menu-option"));
+  const navLinks = Array.from(document.querySelectorAll(".section-nav-link"));
   const replayButton = document.getElementById("replay-boot");
-  let lastMenuTrigger = null;
 
-  function currentPanelId() {
-    const id = window.location.hash.replace(/^#/, "");
-    return panelIds.indexOf(id) === -1 ? "" : id;
-  }
-
-  function renderRoute(options) {
-    const settings = options || {};
-    const id = currentPanelId();
-
-    panels.forEach(function (panel) {
-      const active = panel.id === id;
-      panel.classList.toggle("active", active);
-      panel.setAttribute("aria-hidden", active ? "false" : "true");
-    });
-
-    menuLinks.forEach(function (link) {
-      const active = link.getAttribute("href") === "#" + id;
-      if (active) {
-        link.setAttribute("aria-current", "location");
-      } else {
-        link.removeAttribute("aria-current");
-      }
-    });
-
-    if (settings.focus && id) {
-      const activePanel = document.getElementById(id);
-      activePanel.focus({ preventScroll: true });
-    } else if (settings.focus && !id && lastMenuTrigger) {
-      lastMenuTrigger.focus({ preventScroll: true });
-    }
-  }
-
-  menuLinks.forEach(function (link) {
-    link.addEventListener("click", function () {
-      lastMenuTrigger = link;
-    });
-  });
-
-  document.querySelectorAll(".back-to-menu").forEach(function (link) {
-    link.addEventListener("click", function () {
-      if (!lastMenuTrigger) {
-        lastMenuTrigger = menuLinks.find(function (item) {
-          return item.getAttribute("href") === window.location.hash;
-        }) || menuLinks[0];
-      }
-    });
-  });
-
-  window.addEventListener("hashchange", function () {
-    renderRoute({ focus: true });
-  });
-
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && currentPanelId()) {
-      event.preventDefault();
-      window.location.hash = "top";
-    }
-  });
-
+  // Boot-replay hook. This button only exists on the hub's Credits section.
   if (replayButton) {
     replayButton.addEventListener("click", function () {
       if (window.MangoBoot) window.MangoBoot.replay();
     });
   }
 
-  renderRoute({ focus: false });
+  // Scroll-spy needs the nav links and IntersectionObserver support. Bail out
+  // safely otherwise — the plain anchor links keep working.
+  if (navLinks.length === 0 || typeof IntersectionObserver === "undefined") {
+    return;
+  }
+
+  // Pair each nav link with the section element it points at.
+  const pairs = navLinks
+    .map(function (link) {
+      const id = link.getAttribute("href").replace(/^#/, "");
+      const section = document.getElementById(id);
+      return section ? { link: link, section: section } : null;
+    })
+    .filter(Boolean);
+
+  // Sections currently touching the viewport.
+  const visibleSections = new Set();
+
+  function highlightTopmost() {
+    // The "current" section is the topmost one still visible on screen.
+    let winner = null;
+    pairs.forEach(function (pair) {
+      if (!visibleSections.has(pair.section)) return;
+      // Comparing offsetTop is valid only because every observed section
+      // shares the same offsetParent (no ancestor here is positioned). If a
+      // wrapper like .content-view ever gets `position: relative`, switch to
+      // getBoundingClientRect().top instead.
+      if (!winner || pair.section.offsetTop < winner.section.offsetTop) {
+        winner = pair;
+      }
+    });
+    navLinks.forEach(function (link) {
+      if (winner && link === winner.link) {
+        link.setAttribute("aria-current", "location");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        visibleSections.add(entry.target);
+      } else {
+        visibleSections.delete(entry.target);
+      }
+    });
+    highlightTopmost();
+  }, { threshold: 0 });
+
+  pairs.forEach(function (pair) {
+    observer.observe(pair.section);
+  });
 })();
