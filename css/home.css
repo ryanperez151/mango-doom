@@ -119,68 +119,53 @@
   gap: 0.75rem;
 }
 
+/* Sticky section nav with scroll-spy. Stays visible while scrolling and marks
+   the current section (js/menu.js sets aria-current). Without JS it is just a
+   row of in-page anchor links. On narrow screens it scrolls horizontally
+   inside itself so the page never overflows. */
 .section-nav {
-  margin-block: 2rem;
-  padding: clamp(1rem, 3vw, 1.6rem);
+  position: sticky;
+  z-index: 50;
+  top: 0;
+  margin-block: 0 1.5rem;
   border-block: 1px solid var(--border);
+  background: rgba(13, 7, 0, 0.92);
 }
 
-.section-nav-label {
-  color: var(--muted);
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-}
-
-.menu-options {
-  display: grid;
-  margin: 0;
-  padding: 0;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem 1rem;
-  list-style: none;
-}
-
-.menu-option {
+.section-nav-list {
   display: flex;
-  min-height: 3rem;
+  margin: 0;
+  padding: 0.4rem;
+  gap: 0.3rem;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.section-nav-link {
+  display: inline-flex;
+  min-height: 2.6rem;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.45rem 0.65rem;
-  border-left: 3px solid transparent;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 2px solid transparent;
   color: var(--orange);
   font-family: var(--font-display);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 900;
+  letter-spacing: 0.06em;
   text-decoration: none;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.menu-option:hover,
-.menu-option[aria-current="location"] {
-  border-left-color: var(--red);
-  background: rgba(255, 77, 77, 0.08);
+.section-nav-link:hover,
+.section-nav-link[aria-current="location"] {
+  border-bottom-color: var(--red);
   color: var(--red);
 }
 
 .content-view {
   display: grid;
   gap: 1.5rem;
-}
-
-.js .content-panel {
-  display: none;
-}
-
-.js .content-panel.active {
-  display: block;
-  animation: panel-in 180ms ease-out;
-}
-
-@keyframes panel-in {
-  from { opacity: 0; transform: translateY(0.5rem); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .project-card {
@@ -248,12 +233,7 @@
   overflow-wrap: anywhere;
 }
 
-#replay-boot + .back-to-menu {
-  margin-left: 0.6rem;
-}
-
 @media (max-width: 48rem) {
-  .menu-options,
   .case-study-grid,
   .contact-list {
     grid-template-columns: 1fr;
@@ -261,11 +241,6 @@
 
   .project-heading {
     flex-direction: column;
-  }
-
-  #replay-boot + .back-to-menu {
-    margin-top: 0.7rem;
-    margin-left: 0;
   }
 }
 

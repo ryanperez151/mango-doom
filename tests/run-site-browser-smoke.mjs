@@ -255,6 +255,25 @@ async function run() {
     assert.equal(portfolio.heroCtas, 1, "Hero should have a single primary CTA");
     assert.equal(portfolio.scrollWidth, 320);
 
+    const scannable = await inspect(`({
+      sectionsVisible: ['profile','projects','contact','credits'].every((id) => {
+        const el = document.getElementById(id);
+        return Boolean(el) && el.offsetParent !== null;
+      }),
+      gameSectionGone: !document.getElementById('game'),
+      ctfSectionGone: !document.getElementById('ctf'),
+      navLinks: Array.from(document.querySelectorAll('.section-nav-link')).map((a) => a.getAttribute('href'))
+    })`);
+    assert.equal(scannable.sectionsVisible, true, "All hub sections must be visible in normal flow");
+    assert.equal(scannable.gameSectionGone, true, "#game teaser section should be removed");
+    assert.equal(scannable.ctfSectionGone, true, "#ctf teaser section should be removed");
+    assert.deepEqual(scannable.navLinks, ["#launch", "#profile", "#projects", "#contact", "#credits"]);
+
+    await inspect("window.scrollTo(0, document.getElementById('projects').offsetTop)");
+    await delay(200);
+    const spy = await inspect(`document.querySelector('.section-nav-link[href="#projects"]')?.getAttribute('aria-current')`);
+    assert.equal(spy, "location", "Scroll-spy did not mark the Missions link current");
+
     await navigate("game.html");
     const game = await inspect(`({
       canvas: Boolean(document.querySelector('#viewport')?.getContext('2d')),
