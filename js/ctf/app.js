@@ -16,6 +16,8 @@ import {
 import { CTF_UI_SAVE_VERSION, loadUiSave, removeUiSave, storeUiSave } from "./storage.js";
 import { filterTimelineEvents } from "./timeline.js";
 import { getPairedConsequence } from "./paired.js";
+import { renderConsole } from "./console-view.js";
+import { renderSiem } from "./siem-view.js";
 
 const ctfDom = {
   launch: document.querySelector("#ctf-launch"),
@@ -44,11 +46,16 @@ const ctfDom = {
   assetSummary: document.querySelector("#asset-summary"),
   codesEmpty: document.querySelector("#codes-empty"),
   codeList: document.querySelector("#code-list"),
+  consoleChrome: document.querySelector("#ctf-console-chrome"),
+  scrollback: document.querySelector("#ctf-scrollback"),
+  actionsTitle: document.querySelector("#choices-title"),
+  blueTeam: document.querySelector("#ctf-blue-team"),
+  blueTeamEvents: document.querySelector("#ctf-blue-team-events"),
+  blueTeamCount: document.querySelector("#ctf-blue-team-count"),
+  filterPills: document.querySelector("#ctf-filter-pills"),
+  fields: document.querySelector("#ctf-fields"),
+  severityBars: document.querySelector("#ctf-severity-bars"),
   filterForm: document.querySelector("#timeline-filters"),
-  filterSource: document.querySelector("#filter-source"),
-  filterHost: document.querySelector("#filter-host"),
-  filterSeverity: document.querySelector("#filter-severity"),
-  filterStage: document.querySelector("#filter-stage"),
   filterFrom: document.querySelector("#filter-from"),
   filterTo: document.querySelector("#filter-to"),
   clearFilters: document.querySelector("#clear-filters"),
@@ -191,26 +198,7 @@ function textElement(tagName, className, text) {
   return element;
 }
 
-function setSelectOptions(select, values, firstLabel) {
-  const selected = select.value;
-  select.replaceChildren();
-  const first = document.createElement("option");
-  first.value = "";
-  first.textContent = firstLabel;
-  select.append(first);
-  [...values].sort().forEach((value) => {
-    const option = document.createElement("option");
-    option.value = value;
-    option.textContent = value;
-    select.append(option);
-  });
-  select.value = values.has(selected) ? selected : "";
-}
-
 function initializeFilterControls() {
-  setSelectOptions(ctfDom.filterSource, filterValues.source, "All sources");
-  setSelectOptions(ctfDom.filterHost, filterValues.host, "All hosts");
-  setSelectOptions(ctfDom.filterSeverity, filterValues.severity, "All severities");
   ctfDom.filterFrom.min = "2088-03-14T09:00:00";
   ctfDom.filterFrom.max = "2088-03-14T10:11:30";
   ctfDom.filterTo.min = "2088-03-14T09:00:00";
@@ -243,26 +231,30 @@ function filteredEvents() {
   return filterTimelineEvents(revealedEvents(), ctfUiState.filters, mangoKeepTelemetry.events);
 }
 
-function renderChoices(node, scenario, evidence, engineState) {
+function resolveChoices(node, scenario, engineState, evidence) {
   const availableIds = new Set(getAvailableChoices(scenario, evidence, engineState).map((choice) => choice.id));
-  ctfDom.choices.replaceChildren();
-
-  node.choiceIds.forEach((choiceId) => {
+  return node.choiceIds.map((choiceId) => {
     const choice = scenario.choices.find((item) => item.id === choiceId);
-    const available = availableIds.has(choice.id);
-    const card = document.createElement("article");
-    card.className = `ctf-choice-card${available ? "" : " choice-locked"}`;
-    card.append(textElement("h4", "", choice.label));
-    card.append(textElement("p", "ctf-choice-objective", choice.objective));
-    card.append(textElement("p", "ctf-prerequisite", `Prerequisite: ${choice.prerequisiteSummary}`));
-    if (!available) card.append(textElement("p", "ctf-lock-text", "STATUS: unavailable until the listed evidence or state requirement is met."));
-    const button = textElement("button", "button", available ? "Choose This Action" : "Review Locked Action");
-    button.type = "button";
-    button.dataset.choiceId = choice.id;
-    button.setAttribute("aria-disabled", String(!available));
-    card.append(button);
-    ctfDom.choices.append(card);
+    return {
+      id: choice.id,
+      label: choice.label,
+      objective: choice.objective,
+      prerequisiteSummary: choice.prerequisiteSummary,
+      available: availableIds.has(choice.id),
+    };
   });
+}
+
+function computeFieldCounts(events) {
+  const counts = { source: {}, host: {}, severity: {}, stage: {} };
+  const fieldOf = { source: "dataset", host: "hostname", severity: "severity", stage: "scenario_stage" };
+  events.forEach((event) => {
+    Object.entries(fieldOf).forEach(([bucket, field]) => {
+      const value = event[field];
+      counts[bucket][value] = (counts[bucket][value] ?? 0) + 1;
+    });
+  });
+  return counts;
 }
 
 function renderEvidence(scenario, evidence, engineState) {
@@ -335,45 +327,9 @@ function renderCodes() {
   });
 }
 
-function renderTimeline() {
-  const stages = revealedStages();
-  setSelectOptions(ctfDom.filterStage, stages, "All revealed stages");
-  Object.entries(ctfUiState.filters).forEach(([key, value]) => {
-    const control = ctfDom.filterForm.elements.namedItem(key);
-    if (control) control.value = value;
-  });
-
-  const events = filteredEvents();
-  ctfDom.timelineCount.textContent = `${events.length} ${events.length === 1 ? "event" : "events"} shown`;
-  ctfDom.timelineEvents.replaceChildren();
-  if (events.length === 0) {
-    ctfDom.timelineEvents.append(textElement("p", "ctf-empty", "No revealed synthetic events match these filters."));
-    return;
-  }
-
-  events.forEach((event) => {
-    const card = document.createElement("article");
-    card.className = "timeline-event";
-    const heading = document.createElement("div");
-    heading.className = "timeline-event-heading";
-    heading.append(textElement("h3", "", `${event.event_id} · ${event.action}`));
-    heading.append(textElement("span", `severity severity-${event.severity}`, `Severity: ${event.severity}`));
-    card.append(heading);
-    card.append(textElement("p", "synthetic-tag", "SYNTHETIC — FICTIONAL TRAINING DATA"));
-    card.append(textElement("p", "", event.message));
-    const details = document.createElement("dl");
-    [["Time", event.timestamp], ["Source", event.dataset], ["Host", event.hostname], ["Stage", event.scenario_stage], ["Outcome", event.outcome]].forEach(([term, value]) => {
-      details.append(textElement("dt", "", term), textElement("dd", "", value));
-    });
-    card.append(details);
-    const bookmarked = ctfUiState.eventBookmarks.includes(event.event_id);
-    const button = textElement("button", "button event-bookmark", bookmarked ? "Remove Timeline Bookmark" : "Bookmark Timeline Event");
-    button.type = "button";
-    button.dataset.eventId = event.event_id;
-    button.setAttribute("aria-pressed", String(bookmarked));
-    card.append(button);
-    ctfDom.timelineEvents.append(card);
-  });
+function renderTimelineFilterState() {
+  ctfDom.filterFrom.value = ctfUiState.filters.from;
+  ctfDom.filterTo.value = ctfUiState.filters.to;
 }
 
 function scoreItemsFor(scenario, engineState) {
@@ -452,14 +408,47 @@ function renderWorkspace() {
   ctfDom.hintText.textContent = ctfUiState.hintShown
     ? scenario.hints.find((hint) => hint.id === node.hintIds[0])?.text ?? "No additional hint is available."
     : "";
-  renderChoices(node, scenario, evidence, engineState);
+  applySkin();
+  const ctx = buildViewContext(node, chapter, scenario, evidence, engineState);
+  if (ctfUiState.activeTrack === "threat") {
+    ctfDom.actionsTitle.textContent = "Select an Operation";
+    renderConsole(ctx);
+  } else {
+    ctfDom.actionsTitle.textContent = "Response Playbook";
+    renderSiem(ctx);
+  }
   renderEvidence(scenario, evidence, engineState);
   renderAssets(scenario, engineState);
   renderCodes();
-  renderTimeline();
+  renderTimelineFilterState();
   ctfDom.caseNotes.value = ctfUiState.caseNotes;
   ctfDom.caseNoteCount.textContent = String(ctfUiState.caseNotes.length);
   if (engineState.endingId !== null) renderEnding();
+}
+
+function applySkin() {
+  const isConsole = ctfUiState.activeTrack === "threat";
+  ctfDom.workspace.classList.toggle("ctf-skin-console", isConsole);
+  ctfDom.workspace.classList.toggle("ctf-skin-siem", !isConsole);
+}
+
+function buildViewContext(node, chapter, scenario, evidence, engineState) {
+  const events = filteredEvents();
+  return {
+    dom: ctfDom,
+    textElement,
+    node,
+    chapter,
+    scenario,
+    evidence,
+    engineState,
+    choices: resolveChoices(node, scenario, engineState, evidence),
+    revealedEvents: revealedEvents(),
+    events,
+    fieldCounts: computeFieldCounts(events),
+    filters: ctfUiState.filters,
+    eventBookmarks: ctfUiState.eventBookmarks,
+  };
 }
 
 function startNewSimulation() {
@@ -504,6 +493,39 @@ function applySelectedChoice(choiceId) {
   } catch {
     announce("The deterministic engine rejected that state change. The current state is unchanged.");
   }
+}
+
+function setFilterValue(key, value) {
+  ctfUiState.filters = { ...ctfUiState.filters, [key]: value };
+  persist();
+  renderWorkspace();
+  announce(ctfDom.timelineCount.textContent);
+}
+
+function clearFilterValue(key) {
+  ctfUiState.filters = { ...ctfUiState.filters, [key]: "" };
+  persist();
+  renderWorkspace();
+  announce("Filter removed.");
+}
+
+function clearAllFilters() {
+  ctfUiState.filters = { ...EMPTY_FILTERS };
+  persist();
+  renderWorkspace();
+  announce("Search reset.");
+}
+
+function toggleEventBookmark(eventId) {
+  ctfUiState.eventBookmarks = toggleId(ctfUiState.eventBookmarks, eventId);
+  const isBookmarked = ctfUiState.eventBookmarks.includes(eventId);
+  persist();
+  renderWorkspace();
+  const bookmarkButton = ctfDom.timelineEvents.querySelector(`[data-event-id="${eventId}"]`);
+  const resultRow = bookmarkButton?.closest("details.ctf-result");
+  if (resultRow) resultRow.open = true;
+  bookmarkButton?.focus();
+  announce(isBookmarked ? "Timeline event bookmarked." : "Timeline bookmark removed.");
 }
 
 function continuePairedMode() {
@@ -596,33 +618,22 @@ ctfDom.evidenceList.addEventListener("input", (event) => {
 });
 ctfDom.timelineEvents.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-event-id]");
-  if (!button) return;
-  ctfUiState.eventBookmarks = toggleId(ctfUiState.eventBookmarks, button.dataset.eventId);
-  const isBookmarked = ctfUiState.eventBookmarks.includes(button.dataset.eventId);
-  const eventId = button.dataset.eventId;
-  persist();
-  renderTimeline();
-  ctfDom.timelineEvents.querySelector(`[data-event-id="${eventId}"]`)?.focus();
-  announce(isBookmarked ? "Timeline event bookmarked." : "Timeline bookmark removed.");
+  if (button) toggleEventBookmark(button.dataset.eventId);
 });
 ctfDom.filterForm.addEventListener("change", () => {
-  ctfUiState.filters = {
-    source: ctfDom.filterSource.value,
-    host: ctfDom.filterHost.value,
-    severity: ctfDom.filterSeverity.value,
-    stage: ctfDom.filterStage.value,
-    from: ctfDom.filterFrom.value,
-    to: ctfDom.filterTo.value,
-  };
+  ctfUiState.filters = { ...ctfUiState.filters, from: ctfDom.filterFrom.value, to: ctfDom.filterTo.value };
   persist();
-  renderTimeline();
+  renderWorkspace();
   announce(ctfDom.timelineCount.textContent);
 });
-ctfDom.clearFilters.addEventListener("click", () => {
-  ctfUiState.filters = { ...EMPTY_FILTERS };
-  persist();
-  renderTimeline();
-  announce("Timeline filters cleared.");
+ctfDom.clearFilters.addEventListener("click", clearAllFilters);
+ctfDom.fields.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-filter-key]");
+  if (button) setFilterValue(button.dataset.filterKey, button.dataset.filterValue);
+});
+ctfDom.filterPills.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-clear-key]");
+  if (button) clearFilterValue(button.dataset.clearKey);
 });
 ctfDom.caseNotes.addEventListener("input", () => {
   ctfUiState.caseNotes = ctfDom.caseNotes.value;

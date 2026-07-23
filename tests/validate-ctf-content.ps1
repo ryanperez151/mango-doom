@@ -28,6 +28,8 @@ $relativeRuntimeFiles = @(
     'ctf.html',
     'css\ctf.css',
     'js\ctf\app.js',
+    'js\ctf\console-view.js',
+    'js\ctf\siem-view.js',
     'js\ctf\contracts.js',
     'js\ctf\paired.js',
     'js\ctf\state.js',

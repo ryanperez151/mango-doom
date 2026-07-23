@@ -21,7 +21,10 @@ for quick visual checks.
 - `resume.html` — complete résumé and contact information
 - `projects/mango-sys.html` — verified MANGO.SYS project case study
 - `game.html` — playable PESTICIDE-DMZ raycaster
-- `ctf.html` — deterministic, offline Mango Keep security tabletop
+- `ctf.html` — deterministic, offline Mango Keep security tabletop. The threat
+  track renders as an operator console and the defender track as a structured
+  mock SIEM; both are pure presentation over the same allowlisted engine, with
+  no command entry or free-text search.
 - `css/style.css` — shared tokens, typography, controls, and accessibility styles
 - `css/ctf.css` — responsive CTF workspace, evidence, timeline, and debrief styles
 - `css/home.css`, `css/resume.css`, `css/game.css` — page-specific layouts
@@ -29,6 +32,9 @@ for quick visual checks.
 - `js/menu.js` — sticky section-nav scroll-spy and boot-replay hook
 - `js/raycaster.js`, `js/game.js` — rendering engine and game state
 - `js/ctf/` — validated CTF engine, local-save contract, and page controller
+  - `app.js` — single entry point / page controller
+  - `console-view.js` — attacker "operator console" surface (numbered menu + scrollback) — presentation only
+  - `siem-view.js` — defender "mock SIEM" surface (pills, fields sidebar, expandable results) — presentation only
 
 ## Content rules
 
