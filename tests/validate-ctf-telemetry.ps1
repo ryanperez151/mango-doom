@@ -184,8 +184,23 @@ for ($index = 0; $index -lt $events.Count; $index += 1) {
         }
     }
 
+    # Timestamps must be UTC (a trailing 'Z' in the source JSON). We accept the
+    # value however ConvertFrom-Json hands it back: Windows PowerShell 5.1 keeps
+    # JSON date strings as [string], while PowerShell 7 auto-parses ISO-8601
+    # strings into [datetime] (where a 'Z' becomes Kind=Utc). Checking only the
+    # raw string with '-match Z$' silently fails every record under pwsh 7.
+    $rawTimestamp = $event.timestamp
+    $isUtcInstant = $false
     $parsedTime = [DateTimeOffset]::MinValue
-    if (-not [DateTimeOffset]::TryParse($event.timestamp, [ref]$parsedTime) -or $event.timestamp -notmatch 'Z$') {
+    if ($rawTimestamp -is [datetime]) {
+        if ($rawTimestamp.Kind -eq [System.DateTimeKind]::Utc) {
+            $isUtcInstant = $true
+            $parsedTime = [System.DateTimeOffset]::new($rawTimestamp)
+        }
+    } elseif ($rawTimestamp -is [string] -and $rawTimestamp -match 'Z$') {
+        $isUtcInstant = [System.DateTimeOffset]::TryParse($rawTimestamp, [ref]$parsedTime)
+    }
+    if (-not $isUtcInstant) {
         Add-Failure "$path has an invalid UTC timestamp $($event.timestamp)."
     } elseif ($null -ne $previousTime -and $parsedTime -lt $previousTime) {
         Add-Failure "$path is out of timestamp order."
