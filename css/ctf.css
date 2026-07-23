@@ -727,3 +727,108 @@ dialog::backdrop {
 @media (prefers-reduced-motion: reduce) {
   .ctf-console-cursor { animation: none; }
 }
+
+/* ===== SIEM SKIN ===== */
+
+#ctf-workspace.ctf-skin-siem .ctf-narrative {
+  border-left: 0.35rem solid var(--red);
+}
+
+.ctf-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.ctf-pill {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--orange-soft);
+  background: rgba(255, 157, 31, 0.08);
+  color: var(--orange-soft);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.ctf-pill:hover,
+.ctf-pill:focus-visible { border-color: var(--red); color: var(--red); }
+.ctf-pill-x { font-weight: 900; }
+.ctf-pill-empty { color: var(--muted); font-size: 0.85rem; }
+
+.ctf-severity-bars { display: grid; gap: 0.35rem; margin-bottom: 1rem; }
+.ctf-sev-row { display: grid; grid-template-columns: 5rem minmax(0, 1fr) 2rem; gap: 0.5rem; align-items: center; }
+.ctf-sev-key { justify-self: start; }
+.ctf-sev-track { height: 0.75rem; background: rgba(255, 157, 31, 0.12); }
+.ctf-sev-fill { display: block; height: 100%; background: var(--orange); }
+.ctf-sev-high { background: #ff9292; }
+.ctf-sev-medium { background: #ffe66d; }
+.ctf-sev-low, .ctf-sev-info { background: var(--green); }
+.ctf-sev-count { text-align: right; color: var(--muted); }
+
+.ctf-siem-body {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.5fr) minmax(0, 1.5fr);
+  gap: 1rem;
+  align-items: start;
+}
+.ctf-fields { display: grid; gap: 1rem; min-width: 0; }
+.ctf-field-group { display: grid; gap: 0.25rem; }
+.ctf-field-name {
+  margin: 0;
+  color: var(--orange-soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ctf-field-value {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border);
+  background: rgba(13, 7, 0, 0.5);
+  color: #ffe3bb;
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+}
+.ctf-field-value[aria-pressed="true"] { border-color: var(--red); color: var(--red); }
+.ctf-field-value:hover,
+.ctf-field-value:focus-visible { border-color: var(--orange-soft); }
+.ctf-field-count { color: var(--green); font-weight: 900; }
+
+.ctf-result { border: 1px solid rgba(255, 157, 31, 0.26); background: rgba(13, 7, 0, 0.56); }
+.ctf-result summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  font-family: var(--font-mono, ui-monospace, "Cascadia Code", "Consolas", monospace);
+  font-size: 0.82rem;
+}
+.ctf-result[open] summary { border-bottom: 1px solid var(--border); }
+.ctf-result-time { color: var(--muted); }
+.ctf-result-host { color: var(--orange-soft); }
+.ctf-result-action { color: var(--orange); }
+.ctf-result > *:not(summary) { margin: 0.5rem 0.8rem; }
+.ctf-result dl {
+  display: grid;
+  grid-template-columns: minmax(6rem, auto) minmax(0, 1fr);
+  gap: 0.3rem 0.7rem;
+}
+.ctf-result dt { color: var(--muted); }
+.ctf-result dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+
+@media (max-width: 48rem) {
+  .ctf-siem-body { grid-template-columns: 1fr; }
+}
+@media (max-width: 22rem) {
+  .ctf-sev-row { grid-template-columns: 4rem minmax(0, 1fr) 1.5rem; }
+}

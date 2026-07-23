@@ -239,6 +239,29 @@ async function run() {
     assert.ok(consoleMenu.menuButtons >= 1, "No selectable operations rendered");
     assert.equal(consoleMenu.verbLabel, "SELECT", "Console operation verb must be SELECT, never run/execute");
 
+    // Switch to the defender track and verify the SIEM surface.
+    await inspect("document.querySelector('#ctf-reset').click(); document.querySelector('#confirm-reset').click()");
+    await delay(50);
+    await inspect(`document.querySelector('input[name="ctf-mode"][value="defender"]').click()`);
+    await inspect("document.querySelector('#ctf-start').click()");
+    await delay(100);
+    const siem = await inspect(`({
+      skin: document.querySelector('#ctf-workspace').className,
+      focused: document.activeElement?.id,
+      fieldButtons: document.querySelectorAll('#ctf-fields button[data-filter-key]').length,
+      results: document.querySelectorAll('#timeline-events details.ctf-result').length,
+      freeTextInputs: document.querySelectorAll('#ctf-workspace input:not([type=datetime-local]):not([type=radio]):not([type=checkbox]), #ctf-workspace input[type=text], #ctf-workspace input[type=search]').length,
+      noExecuteLabel: Array.from(document.querySelectorAll('#ctf-choices .ctf-choice-card > button')).every((b) => !/\b(run|execute)\b/i.test(b.textContent || '')),
+      scrollWidth: document.documentElement.scrollWidth
+    })`);
+    assert.ok(siem.skin.includes("ctf-skin-siem"), "Defender track did not apply the SIEM skin class");
+    assert.equal(siem.focused, "node-title", "Defender start did not focus the incident header");
+    assert.ok(siem.fieldButtons >= 1, "SIEM fields sidebar rendered no clickable values");
+    assert.ok(siem.results >= 1, "SIEM rendered no expandable result rows");
+    assert.equal(siem.freeTextInputs, 0, "Workspace must expose no free-text/command input controls");
+    assert.equal(siem.noExecuteLabel, true, "Workspace must not use run/execute labels anywhere");
+    assert.equal(siem.scrollWidth, 320, "SIEM skin caused horizontal overflow at 320px");
+
     await inspect("document.querySelector('#ctf-reset').click()");
     const openedDialog = await inspect(`({ open: document.querySelector('#reset-dialog').open, focused: document.activeElement?.id })`);
     assert.deepEqual(openedDialog, { open: true, focused: "cancel-reset" });
