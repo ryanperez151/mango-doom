@@ -621,3 +621,109 @@ dialog::backdrop {
       "notebook";
   }
 }
+
+/* ===== CONSOLE SKIN ===== */
+
+#ctf-workspace.ctf-skin-console .ctf-narrative {
+  font-family: var(--font-mono, ui-monospace, "Cascadia Code", "Consolas", monospace);
+  border-left: 0.35rem solid var(--green);
+}
+
+.ctf-console-banner {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--green);
+  background: rgba(82, 255, 122, 0.06);
+}
+
+.ctf-console-title {
+  display: block;
+  color: var(--green);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.ctf-console-prompt {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0.35rem 0 0;
+}
+
+.ctf-console-user { color: var(--orange-soft); }
+
+.ctf-console-cursor {
+  color: var(--green);
+  animation: ctf-cursor-blink 1s steps(2, start) infinite;
+}
+
+@keyframes ctf-cursor-blink { to { opacity: 0; } }
+
+/* Numbered operation menu. */
+.ctf-menu-row { min-width: 0; }
+
+.ctf-menu-button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(255, 157, 31, 0.26);
+  background: rgba(13, 7, 0, 0.56);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ctf-menu-button:hover,
+.ctf-menu-button:focus-visible {
+  border-color: var(--red);
+  box-shadow: inset 0.3rem 0 0 var(--red);
+}
+
+.ctf-menu-index { color: var(--green); font-weight: 900; }
+.ctf-menu-label { display: grid; gap: 0.2rem; min-width: 0; }
+.ctf-menu-verb { color: var(--muted); font-size: 0.7rem; font-weight: 900; letter-spacing: 0.12em; }
+.ctf-menu-title { color: var(--orange-soft); font-family: var(--font-display); text-transform: uppercase; }
+.ctf-menu-objective { color: var(--orange); font-size: 0.85rem; }
+.ctf-menu-lock { color: #ffb7b7; font-size: 0.8rem; font-weight: 900; }
+
+.ctf-menu-row.choice-locked .ctf-menu-button {
+  border-style: dashed;
+  opacity: 0.78;
+  cursor: not-allowed;
+}
+
+/* Decision scrollback. */
+#ctf-scrollback {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+#ctf-workspace.ctf-skin-siem #ctf-scrollback,
+#ctf-workspace.ctf-skin-siem #ctf-console-chrome { display: none; }
+
+.ctf-scrollback-entry {
+  padding: 0.6rem 0.8rem;
+  border-left: 0.2rem solid var(--muted);
+  background: rgba(13, 7, 0, 0.5);
+  font-family: var(--font-mono, ui-monospace, "Cascadia Code", "Consolas", monospace);
+}
+.ctf-scrollback-cmd { margin: 0 0 0.35rem; color: var(--green); }
+.ctf-scrollback-out { margin: 0 0 0.35rem; color: var(--orange); font-size: 0.9rem; }
+.ctf-scrollback-note { margin: 0; color: var(--muted); font-size: 0.82rem; }
+
+.ctf-blue-team summary {
+  color: var(--orange-soft);
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.ctf-blue-team-row { margin: 0.25rem 0; font-size: 0.82rem; overflow-wrap: anywhere; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ctf-console-cursor { animation: none; }
+}

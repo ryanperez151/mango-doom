@@ -228,6 +228,17 @@ async function run() {
     assert.ok(workspace.skin.includes("ctf-skin-console"), "Threat track did not apply the console skin class");
     assert.ok(workspace.saveKeys.some((key) => key.startsWith("mangoSys.ctf")), "Starting did not create a versioned local save");
 
+    const consoleMenu = await inspect(`({
+      hasBanner: Boolean(document.querySelector('#ctf-console-chrome .ctf-console-banner')),
+      firstMenuIndex: document.querySelector('#ctf-choices .ctf-menu-row .ctf-menu-index')?.textContent || '',
+      menuButtons: document.querySelectorAll('#ctf-choices button[data-choice-id]').length,
+      verbLabel: document.querySelector('#ctf-choices .ctf-menu-verb')?.textContent || ''
+    })`);
+    assert.equal(consoleMenu.hasBanner, true, "Console banner missing");
+    assert.equal(consoleMenu.firstMenuIndex, "[1]", "First operation is not numbered [1]");
+    assert.ok(consoleMenu.menuButtons >= 1, "No selectable operations rendered");
+    assert.equal(consoleMenu.verbLabel, "SELECT", "Console operation verb must be SELECT, never run/execute");
+
     await inspect("document.querySelector('#ctf-reset').click()");
     const openedDialog = await inspect(`({ open: document.querySelector('#reset-dialog').open, focused: document.activeElement?.id })`);
     assert.deepEqual(openedDialog, { open: true, focused: "cancel-reset" });
