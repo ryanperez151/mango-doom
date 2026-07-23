@@ -243,10 +243,16 @@ async function run() {
     const portfolio = await inspect(`({
       exists: Boolean(document.querySelector('#portfolio')),
       ctfLink: document.querySelector('a[href="ctf.html"]')?.textContent.trim(),
+      gameLink: document.querySelector('#launch a[href="game.html"]')?.textContent.trim(),
+      missionCards: document.querySelectorAll('#launch .mission-card').length,
+      heroCtas: document.querySelectorAll('.hero .hero-actions .button').length,
       scrollWidth: document.documentElement.scrollWidth
     })`);
     assert.equal(portfolio.exists, true);
-    assert.ok(portfolio.ctfLink);
+    assert.ok(portfolio.ctfLink, "Launch bay is missing the CTF card link");
+    assert.ok(portfolio.gameLink, "Launch bay is missing the game card link");
+    assert.equal(portfolio.missionCards, 4, "Launch bay should have four mission cards");
+    assert.equal(portfolio.heroCtas, 1, "Hero should have a single primary CTA");
     assert.equal(portfolio.scrollWidth, 320);
 
     await navigate("game.html");
