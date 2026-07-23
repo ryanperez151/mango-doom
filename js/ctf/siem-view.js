@@ -43,7 +43,7 @@ export function renderSiem(ctx) {
       details.append(textElement("dt", "", term), textElement("dd", "", value));
     });
     card.append(details);
-    const bookmarked = ctx.dom.eventBookmarks?.includes?.(event.event_id) ?? false;
+    const bookmarked = ctx.eventBookmarks.includes(event.event_id);
     const button = textElement("button", "button event-bookmark", bookmarked ? "Remove Timeline Bookmark" : "Bookmark Timeline Event");
     button.type = "button";
     button.dataset.eventId = event.event_id;

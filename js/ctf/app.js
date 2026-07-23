@@ -446,6 +446,7 @@ function buildViewContext(node, chapter, scenario, evidence, engineState) {
     events: filteredEvents(),
     fieldCounts: computeFieldCounts(filteredEvents()),
     filters: ctfUiState.filters,
+    eventBookmarks: ctfUiState.eventBookmarks,
     handlers: {
       onChoose: applySelectedChoice,
       onSetFilter: setFilterValue,
