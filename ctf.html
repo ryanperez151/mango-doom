@@ -96,32 +96,52 @@
         </div>
       </section>
 
-      <div class="ctf-dashboard">
-        <section class="content-panel ctf-narrative" aria-labelledby="node-title">
-          <p class="panel-kicker" id="chapter-label">SIMULATION BRIEF</p>
-          <h2 id="node-title" tabindex="-1">Loading narrative</h2>
-          <p class="ctf-objective-label">Narrative</p>
-          <p id="node-body"></p>
-          <div class="ctf-objective-box">
-            <h3>Current Objective</h3>
-            <p id="node-objective"></p>
-          </div>
+      <section class="content-panel ctf-narrative" aria-labelledby="node-title">
+        <!-- Console-only decorative chrome; hidden in the SIEM skin via CSS. -->
+        <div id="ctf-console-chrome" aria-hidden="true"></div>
+        <p class="panel-kicker" id="chapter-label">SIMULATION BRIEF</p>
+        <h2 id="node-title" tabindex="-1">Loading narrative</h2>
+        <p class="ctf-objective-label">Narrative</p>
+        <p id="node-body"></p>
+        <div class="ctf-objective-box">
+          <h3>Current Objective</h3>
+          <p id="node-objective"></p>
+        </div>
+        <p class="ctf-paired-consequence" id="paired-consequence" hidden></p>
+        <div class="ctf-hint" id="ctf-hint" tabindex="-1" hidden>
+          <h3>Learning Hint</h3>
+          <p id="ctf-hint-text"></p>
+        </div>
+        <button class="button" id="ctf-show-hint" type="button">Show Learning Hint</button>
+        <div class="ctf-feedback" id="choice-feedback" role="status" tabindex="-1" hidden></div>
+        <!-- Console-only decision scrollback; empty (and hidden) in the SIEM skin. -->
+        <div id="ctf-scrollback" aria-live="off"></div>
+      </section>
 
-          <p class="ctf-paired-consequence" id="paired-consequence" hidden></p>
+      <section class="content-panel ctf-actions" aria-labelledby="choices-title">
+        <h3 id="choices-title">Choose an Action</h3>
+        <div id="ctf-choices" class="ctf-choice-list"></div>
+      </section>
 
-          <div class="ctf-hint" id="ctf-hint" tabindex="-1" hidden>
-            <h3>Learning Hint</h3>
-            <p id="ctf-hint-text"></p>
-          </div>
-          <button class="button" id="ctf-show-hint" type="button">Show Learning Hint</button>
+      <aside class="ctf-sidebar" aria-label="Case information">
+        <details class="content-panel ctf-drawer" open>
+          <summary>Evidence Drawer <span id="evidence-count">0 visible</span></summary>
+          <p class="ctf-drawer-help">Bookmark decision-relevant records and keep local notes. Notes are inert text and never interpreted.</p>
+          <div id="evidence-list" class="evidence-list"></div>
+        </details>
 
-          <div class="ctf-feedback" id="choice-feedback" role="status" tabindex="-1" hidden></div>
-
-          <section class="ctf-choice-region" aria-labelledby="choices-title">
-            <h3 id="choices-title">Choose an Action</h3>
-            <div id="ctf-choices" class="ctf-choice-list"></div>
-          </section>
+        <section class="content-panel" aria-labelledby="asset-title">
+          <h2 id="asset-title">Asset Health</h2>
+          <p class="ctf-region-help">How each fictional asset is holding up — and whether it is contained — as the incident unfolds.</p>
+          <div id="asset-summary" class="asset-summary"></div>
         </section>
+
+        <section class="content-panel" aria-labelledby="codes-title">
+          <h2 id="codes-title">Evidence Codes</h2>
+          <p id="codes-empty">Codes reward reasoning and completed transitions, never command entry.</p>
+          <ul id="code-list" class="code-list"></ul>
+        </section>
+      </aside>
 
         <aside class="ctf-sidebar" aria-label="Case information">
           <details class="content-panel ctf-drawer" open>
@@ -144,11 +164,12 @@
         </aside>
       </div>
 
+      <!-- SIEM skin: full structured event search. Hidden in the console skin via CSS. -->
       <section class="content-panel ctf-timeline" aria-labelledby="timeline-title">
         <div class="timeline-heading">
           <div>
             <p class="panel-kicker">SYNTHETIC EVENT CORPUS</p>
-            <h2 id="timeline-title">Filterable Event Timeline</h2>
+            <h2 id="timeline-title">Event Search</h2>
           </div>
           <p id="timeline-count">0 events shown</p>
         </div>
